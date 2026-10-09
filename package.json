@@ -1,0 +1,24 @@
+{
+  "name": "react-submit-flow-workspace",
+  "private": true,
+  "packageManager": "pnpm@10.26.2",
+  "engines": { "node": ">=20.19.0" },
+  "scripts": {
+    "dev": "pnpm --filter react-submit-flow build && concurrently -k \"pnpm --filter react-submit-flow dev\" \"wait-on packages/react-submit-flow/dist/index.js && pnpm --filter @react-submit-flow/website dev\"",
+    "build": "pnpm --filter react-submit-flow build && pnpm --filter @react-submit-flow/website build",
+    "build:package": "pnpm --filter react-submit-flow build",
+    "build:website": "pnpm --filter @react-submit-flow/website build",
+    "typecheck": "pnpm --filter react-submit-flow typecheck && pnpm --filter @react-submit-flow/website typecheck",
+    "lint": "pnpm --filter react-submit-flow lint && pnpm --filter @react-submit-flow/website lint",
+    "check": "pnpm typecheck && pnpm lint && pnpm build",
+    "test": "pnpm --filter react-submit-flow test",
+    "test:e2e": "pnpm --filter @react-submit-flow/website test:e2e",
+    "check:package": "pnpm --filter react-submit-flow check:package"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.39.0",
+    "wait-on": "^8.0.4"
+  }
+}

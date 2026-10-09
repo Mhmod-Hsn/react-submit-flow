@@ -1,0 +1,32 @@
+# Headless entry and adapters
+
+Import `useSubmitFlow` and public types from `react-submit-flow/headless` when you render all controls and feedback yourself. This entry does not import the built-in provider or dialog component.
+
+```tsx
+import { useSubmitFlow } from 'react-submit-flow/headless'
+
+function HeadlessSave() {
+  const flow = useSubmitFlow({
+    save: { run: async (input: { title: string }) => saveDraft(input) },
+  })
+  return <button disabled={flow.isBusy} onClick={() => void flow.run('save', { title: 'Draft' })}>
+    {flow.isBusy ? 'Saving…' : 'Save'}
+  </button>
+}
+```
+
+Pass `FlowOptions.adapters` to connect a custom confirmation session or notification system. A confirmation adapter receives the request plus an `AbortSignal` and trigger element. `retainedConfirmation` is required when an action sets `closeOnConfirm: false`; its session exposes `decision`, `closed`, `update`, and `close`.
+
+```tsx
+const flow = useSubmitFlow(actions, {
+  adapters: {
+    confirm: async (request, { signal }) => myDialog.confirm(request, { signal }),
+    notifications: {
+      notify: (message) => toast(message.message),
+      dismiss: (id) => toast.dismiss(id),
+    },
+  },
+})
+```
+
+An adapter owns its presentation, focus behavior, and cleanup. A headless flow that requests confirmation without a provider or adapter reports a setup error before running the action. The current `useSubmitFeedback()` standalone alert/confirm API belongs to the UI entry and requires the provider.

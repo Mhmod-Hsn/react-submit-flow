@@ -1,0 +1,23 @@
+# `useSubmitFlow`
+
+`useSubmitFlow(actions, options?)` creates an independent typed flow. Action names, inputs, and resolved outputs are inferred from the action map.
+
+```tsx
+const flow = useSubmitFlow({
+  save: {
+    run: async (input: { title: string }, { signal }) => saveDraft(input, signal),
+    pendingLabel: 'Saving…',
+    success: (saved, input) => `Saved “${input.title}” as ${saved.id}.`,
+    error: 'Could not save this draft.',
+    feedback: 'toast', // 'toast' | 'inline' | 'none'
+  },
+})
+
+const result = await flow.run('save', { title: 'Plan' })
+```
+
+Each `run(input, context)` may return a value or promise. The context contains `signal`, `runId`, `action`, and `throwIfCancelled()`. `confirm` can be an options object or a function of the input. `closeOnConfirm: false` keeps the built-in confirmation visible while the action executes.
+
+The returned object contains `id`, `status`, `isBusy`, `pendingAction`, `pendingLabel`, `lastResult`, and `feedback`, plus `run`, `cancel`, `reset`, and `clearFeedback` methods. See [results and errors](/docs/concepts/results-and-errors) for narrowing outcomes.
+
+`FlowOptions` currently supports `successMessage`, `errorMessage`, `adapters`, and `onObserverError`. Provider-level dialog and toast settings are documented in [Provider and feedback](/docs/api/provider-and-feedback).

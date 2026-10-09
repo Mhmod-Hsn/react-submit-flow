@@ -1,0 +1,61 @@
+# Getting started
+
+Install the library and peer dependencies:
+
+```sh
+pnpm add react-submit-flow react react-dom
+```
+
+## Add the provider
+
+For Next.js App Router, place `SubmitFlowProvider` in a small client component and render it from the root layout. Static layout content and documentation can remain server rendered.
+
+```tsx
+'use client'
+import { SubmitFlowProvider } from 'react-submit-flow'
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <SubmitFlowProvider>{children}</SubmitFlowProvider>
+}
+```
+
+You may import the optional theme once from your root layout:
+
+```tsx
+import 'react-submit-flow/styles.css'
+```
+
+The default UI remains usable when this stylesheet is omitted.
+
+## Build a flow
+
+```tsx
+'use client'
+import { SubmitButton, SubmitFlowForm, useSubmitFlow } from 'react-submit-flow'
+
+export function ProfileForm() {
+  const flow = useSubmitFlow({
+    save: {
+      run: async (input: { name: string }) => saveProfile(input),
+      pendingLabel: 'Saving…',
+      success: 'Profile saved.',
+    },
+  })
+
+  return <SubmitFlowForm flow={flow} defaultAction="save"
+    getInput={{ save: data => ({ name: String(data.get('name') ?? '') }) }}>
+    <label>Name <input name="name" required /></label>
+    <SubmitButton action="save">Save</SubmitButton>
+  </SubmitFlowForm>
+}
+```
+
+Add `confirm: { title, description }` to an action to ask before it runs. Add `destructive: true` to put focus on the safe cancel action. `closeOnConfirm: false` keeps that dialog open to show loading, cancellation, or an error.
+
+`run(action, input)` returns a typed result. Check its `status` before using `data`; expected action failures are returned, not thrown. A duplicate call on a busy flow returns `{ status: 'skipped', reason: 'busy' }`.
+
+## Use an existing form library
+
+Keep schema validation and field state in React Hook Form. Call `flow.run('save', values)` in its valid submit callback and mount `SubmitFlowRoot` around the form's action buttons. Do not nest `SubmitFlowForm` around a form that your form library already renders.
+
+Continue with [flow lifecycle](/docs/concepts/flow-lifecycle), [component APIs](/docs/api/components), or the [complete example catalog](/examples).

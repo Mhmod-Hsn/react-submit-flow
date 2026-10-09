@@ -1,0 +1,36 @@
+# React Hook Form
+
+Let React Hook Form own fields and validation. Call `flow.run()` only from the valid-submit callback, so validation failures never enter the async action lifecycle. Do not wrap an RHF `<form>` in `SubmitFlowForm`; use `SubmitFlowRoot` for the shared buttons and feedback instead.
+
+```tsx
+'use client'
+import { useForm } from 'react-hook-form'
+import { ActionButton, SubmitFeedback, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+type Values = { email: string }
+
+export function InviteForm() {
+  const form = useForm<Values>()
+  const flow = useSubmitFlow({
+    invite: {
+      run: async (values: Values) => sendInvite(values),
+      pendingLabel: 'Sending invite…',
+      success: 'Invitation sent.',
+    },
+  })
+
+  return <SubmitFlowRoot flow={flow}>
+    <form onSubmit={form.handleSubmit(async (values) => {
+      const result = await flow.run('invite', values)
+      if (result.status === 'success') form.reset()
+    })}>
+      <input {...form.register('email', { required: 'Email is required' })} />
+      {form.formState.errors.email && <p role="alert">{form.formState.errors.email.message}</p>}
+      <button type="submit" disabled={flow.isBusy}>Invite</button>
+      <SubmitFeedback />
+    </form>
+  </SubmitFlowRoot>
+}
+```
+
+The import is shown as a recipe; React Hook Form is not bundled by this library or installed in the documentation app. See the [validation example](/examples/rhf-validation) for the responsibility boundary.

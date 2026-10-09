@@ -1,0 +1,32 @@
+# Provider and feedback
+
+Wrap the client part of an application in `SubmitFlowProvider` to enable built-in dialogs and shared notifications. A provider instance owns its own modal queue and toast host; nested providers are isolated.
+
+```tsx
+'use client'
+import { SubmitFlowProvider } from 'react-submit-flow'
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <SubmitFlowProvider toastDuration={5000} maxVisibleToasts={3}>
+    {children}
+  </SubmitFlowProvider>
+}
+```
+
+Provider props include `dialogDefaults`, `toastDuration`, `maxVisibleToasts`, `portalContainer`, and `className`. The current built-in dialog renderer uses the browser's native `<dialog>` top layer. `portalContainer` is part of the public options shape; custom adapter renderers should use it when mounting their own UI.
+
+## Standalone dialog hook
+
+`useSubmitFeedback()` returns `confirm(options)` and `alert(options)`. It must be called under a provider. Confirmation returns a boolean; alert returns an acknowledgement or dismissal result.
+
+```tsx
+const feedback = useSubmitFeedback()
+const confirmed = await feedback.confirm({
+  title: 'Delete this item?',
+  destructive: true,
+  confirmLabel: 'Delete',
+})
+if (confirmed) await deleteItem()
+```
+
+The provider serializes its built-in modal requests. Notifications do not move focus; success messages time out by default and errors remain until dismissed. See [Dialogs](/docs/dialogs) for dismissal behavior and the [standalone demo](/examples/standalone-dialogs).

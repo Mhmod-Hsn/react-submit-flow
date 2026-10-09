@@ -1,0 +1,35 @@
+# Flow lifecycle
+
+A flow belongs to one form or one independent group of actions. It owns its own status, active action, cancellation signal, and last result. The provider owns shared dialogs and notifications; it does not serialize unrelated flows.
+
+## State transitions
+
+```text
+idle → confirming → pending → success | error
+idle → pending → cancelling → cancelled
+confirming → cancelled (declined or dismissed)
+```
+
+`isBusy` is true during confirmation, execution, and cancellation cleanup. A new call made while busy resolves with `{ status: 'skipped', reason: 'busy' }`. Calls are guarded synchronously, so two clicks in the same event turn still start only one request.
+
+```tsx
+const flow = useSubmitFlow({
+  save: {
+    run: async (input: { title: string }) => saveRecord(input),
+    pendingLabel: 'Saving…',
+  },
+})
+
+const result = await flow.run('save', { title: 'Draft' })
+if (result.status === 'success') {
+  console.log(result.data)
+}
+```
+
+Status is a snapshot for rendering. Use the `run()` result to make decisions in event handlers; do not wait for a render before starting dependent work. `reset()` clears terminal state and returns `false` while the action is busy.
+
+## Independent flows
+
+Create one hook instance per independently managed form or action group. Two flows may run at once while sharing a provider. Each keeps its own result and busy lock; notifications are shared.
+
+See the [independent forms example](/examples/independent-flows) and [API reference](/docs/api/use-submit-flow).

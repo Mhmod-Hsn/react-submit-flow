@@ -1,0 +1,38 @@
+# Results and errors
+
+Expected execution failures resolve as a typed result. They do not reject `run()`. Unknown action names and unsupported setup are programmer errors and can throw before execution starts.
+
+```tsx
+const result = await flow.run('publish', { id: 'draft-1' })
+
+switch (result.status) {
+  case 'success':
+    // `data` is inferred from the publish runner's resolved value.
+    router.push(`/posts/${result.data.postId}`)
+    break
+  case 'error':
+    reportFailure(result.error)
+    break
+  case 'cancelled':
+    // Declined confirmation and user cancellation do not show an error.
+    break
+  case 'skipped':
+    // This flow was already confirming or running.
+    break
+}
+```
+
+The default error message is intentionally generic. Map server and domain errors to safe text with the action's `error` option. Keep field validation in the form layer so invalid input never enters the async execution lifecycle.
+
+```tsx
+const flow = useSubmitFlow({
+  rename: {
+    run: renameRecord,
+    error: (error) => error instanceof DuplicateNameError
+      ? 'That name is already in use.'
+      : 'We could not rename this record.',
+  },
+})
+```
+
+`onSuccess`, `onError`, and `onCancel` are observers. If an observer or message formatter throws, the execution result remains unchanged; diagnostics go to `onObserverError` when provided. See [the live failure example](/examples/basic-form).

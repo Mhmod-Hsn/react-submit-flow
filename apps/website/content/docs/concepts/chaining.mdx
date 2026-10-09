@@ -1,0 +1,27 @@
+# Chaining actions
+
+For one logical operation, put sequential steps in one runner. The flow then holds one busy lock and emits one final result.
+
+```tsx
+const flow = useSubmitFlow({
+  createAndNotify: {
+    run: async (input: { email: string }, { signal, throwIfCancelled }) => {
+      const account = await createAccount(input, { signal })
+      throwIfCancelled()
+      await sendWelcomeEmail(account.id, { signal })
+      return account
+    },
+  },
+})
+```
+
+Use separate `run()` calls when the second action depends on inspecting the first result. Start the next call after the first promise settles; a same-flow call from inside its own runner is skipped as busy.
+
+```tsx
+const created = await flow.run('create', values)
+if (created.status === 'success') {
+  await flow.run('notify', { accountId: created.data.id })
+}
+```
+
+Failures do not undo side effects from earlier steps. Add application-owned compensation when the domain requires it. See the [chaining example](/examples/chained-steps).

@@ -1,0 +1,61 @@
+# Dialogs and feedback
+
+Built-in dialogs require `SubmitFlowProvider`. The provider serializes standalone confirmation, acknowledgement, and action confirmation requests so only one built-in prompt is active at a time. Each request has an explicit result; dismissal never counts as confirmation.
+
+## Standalone confirmation
+
+```tsx
+const feedback = useSubmitFeedback()
+const confirmed = await feedback.confirm({
+  title: 'Delete this project?',
+  description: 'You cannot undo this action.',
+  destructive: true,
+})
+if (confirmed) await deleteProject()
+```
+
+`confirm()` returns `true` only when the user confirms. Cancel and allowed dismissal paths return `false`.
+
+## Acknowledgement
+
+```tsx
+const result = await feedback.alert({
+  title: 'Export ready',
+  description: 'Your archive has been created.',
+  variant: 'success',
+  acknowledgeLabel: 'Done',
+})
+```
+
+The result distinguishes acknowledgement from dismissal: `{ status: 'acknowledged' }` or `{ status: 'dismissed', reason }`.
+
+## Presentation and dismissal
+
+Dialogs accept `neutral`, `danger`, `warning`, `success`, or `info` variants and responsive `sm`, `md`, or `lg` sizes. An optional `width` respects the viewport. `content` accepts React content for a summary or preview; provide a readable `title` and keep `description` concise.
+
+Escape closes an undecided dialog by default. Backdrop presses are ignored unless `outsidePress` is enabled; they never confirm. `closeOnEscape: false` keeps the active prompt open. While an action runs in a retained dialog, Escape and backdrop presses cannot close or cancel that action; use its Cancel action to request cancellation.
+
+Built-in dialogs use the browser's native `<dialog>` element. The current docs site does not claim tested focus restoration when nested inside another dialog library. If your app has its own modal stack, use an adapter that integrates with that stack and verify focus, Escape, and outside-click behavior there.
+
+## Keep a confirmation open while saving
+
+```tsx
+const flow = useSubmitFlow({
+  publish: {
+    run: publishProject,
+    confirm: { title: 'Publish now?', description: 'This will make it public.' },
+    closeOnConfirm: false,
+    pendingLabel: 'Publishing…',
+  },
+})
+```
+
+The action runs once after confirmation. Success closes the dialog. Cancellation shows its pending state until the action settles. Failure appears inside the dialog; closing it never retries. Start a new action explicitly to try again.
+
+Do not await another provider dialog from inside a retained dialog's action; its modal queue slot is still occupied. Show all required prompts before starting the retained action.
+
+## Notifications
+
+Success messages close after five seconds by default. Errors remain until dismissed. Supply `notify` and `dismiss` adapters to use an existing toast system, or render `SubmitFeedback` inline with a flow.
+
+See the [standalone dialog example](/examples/standalone-dialogs), [variant and size gallery](/examples/dialog-options), and [retained error example](/examples/retained-confirmation).

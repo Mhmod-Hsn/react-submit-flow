@@ -1,0 +1,17 @@
+# Forms
+
+`SubmitFlowForm` preserves browser validation and native submission semantics. Invalid required fields do not start a flow. The submit event is the only execution path for `SubmitButton`; buttons do not run the action from their click handler.
+
+```tsx
+<SubmitFlowForm flow={flow} defaultAction="save"
+  getInput={{ save: (data) => ({ email: String(data.get('email') ?? '') }) }}>
+  <label>Email <input name="email" type="email" required /></label>
+  <SubmitButton action="save">Save</SubmitButton>
+</SubmitFlowForm>
+```
+
+The `SubmitEvent.submitter` selects the action when a submit button initiated the event. Enter-key submission falls back to `defaultAction`. A `getInput` converter receives `FormData` and the submitter element. Conversion errors are shown in the form's inline error area and do not become action results.
+
+Keep schema and field validation in your existing form solution. `SubmitFlowForm` does not register fields, reset values automatically, or create a nested form. Use `SubmitFlowRoot` around an existing form when that form already owns its submit handler; call `flow.run()` from the valid submit callback.
+
+For React Hook Form, see the [integration recipe](/docs/integrations/react-hook-form). The [basic form demo](/examples/basic-form) includes a simulated request failure.

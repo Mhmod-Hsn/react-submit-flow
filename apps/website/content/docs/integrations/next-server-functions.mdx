@@ -1,0 +1,34 @@
+# Next.js Server Functions
+
+Call an imported Server Function from a client action runner. The client owns the pending state and feedback; the server function owns authorization, validation, and persistence. An `AbortSignal` does not cross the server boundary automatically.
+
+```tsx
+// actions.ts — server module
+'use server'
+export async function saveProfile(input: ProfileInput) {
+  await requireCurrentUser()
+  return updateProfile(input)
+}
+```
+
+```tsx
+// profile-form.tsx — client module
+'use client'
+import { saveProfile } from './actions'
+import { useSubmitFlow } from 'react-submit-flow'
+
+const flow = useSubmitFlow({
+  save: {
+    run: async (input: ProfileInput) => {
+      const result = await saveProfile(input)
+      if (!result.ok) throw new Error(result.code)
+      return result.profile
+    },
+    error: (error) => error instanceof Error && error.message === 'NAME_TAKEN'
+      ? 'Choose a different name.'
+      : 'We could not save your profile.',
+  },
+})
+```
+
+Map server-returned domain errors explicitly and display safe user-facing text. The example app does not perform real writes; this recipe is illustrative. See [Next.js setup](/docs/getting-started).

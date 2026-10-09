@@ -1,0 +1,29 @@
+# Overview
+
+`react-submit-flow` coordinates typed async actions with pending, success, error, confirmation, and cancellation behavior. It works with native forms and existing form libraries; it does not own field registration or validation.
+
+## Keep your existing form tools
+
+The package does not register fields or validate schemas. Use native forms, React Hook Form, Zod, your API client, and your own routing. A flow starts after your form has valid values.
+
+## Choose your level of control
+
+- Use the automatic entry for buttons, forms, provider dialogs, and notifications.
+- Use `/headless` when you want to render every state yourself.
+- Use `useSubmitFeedback()` for a standalone confirmation or acknowledgement dialog.
+
+One provider can serve an application subtree. Every `useSubmitFlow()` instance keeps its own lock and result, so unrelated forms can submit at the same time.
+
+## Async functions remain yours
+
+An action may run any asynchronous work. Await sequential steps in one action to keep one pending state and one final result. Throw or map failures explicitly; a `fetch()` response with an HTTP error status does not throw by itself. A cancelled request is not a rollback guarantee.
+
+## Find your way around
+
+- [Getting started](/docs/getting-started) installs the provider and creates a first form.
+- [Concepts](/docs/concepts/flow-lifecycle) explain ownership, results, cancellation, and chaining.
+- [API reference](/docs/api/use-submit-flow) documents hooks, components, providers, and adapters.
+- [Forms](/docs/forms) covers native submission and mapping `FormData`.
+- [Integrations](/docs/integrations/react-hook-form) covers React Hook Form, TanStack Query, and Next.js Server Functions.
+- [Dialogs](/docs/dialogs) explains standalone and action confirmations.
+- [All examples](/examples) contains runnable demos and integration recipes.

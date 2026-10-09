@@ -1,0 +1,13 @@
+# Styling
+
+Built-in dialogs and notifications include small inline layout styles so they remain usable without a stylesheet. Import `react-submit-flow/styles.css` for focus rings, variant colors, reduced-motion transitions, and theme tokens.
+
+Components expose `sf-*` slots, `data-state`, `data-variant`, and `data-size`. Set CSS variables such as `--sf-accent`, `--sf-danger`, `--sf-dialog-sm`, `--sf-dialog-md`, and `--sf-dialog-lg`. Colors and sizing do not change dialog behavior.
+
+Use `className` on buttons and feedback components. Dialogs accept provider `className` for the shared notification host. Follow `dir="rtl"`; positioning uses CSS logical properties.
+
+Optional theme presets can be imported from `react-submit-flow/themes/forest.css` or `react-submit-flow/themes/high-contrast.css`. Import one after `styles.css` so its tokens override the defaults. You can also define the same `--sf-*` tokens in your application stylesheet.
+
+Set `data-theme` on the root `<html>` element to activate the preset. For example, use `<html data-theme="forest">` or `<html data-theme="high-contrast">`. The selector at the top of this docs site switches between the default palette and both shipped presets; it remembers your choice in this browser.
+
+The dialog `content` slot accepts trusted React nodes for summaries and previews. Notifications accept plain text, never HTML.

@@ -1,0 +1,21 @@
+# Troubleshooting
+
+## `useSubmitFeedback()` reports a missing provider
+
+Render the component under `SubmitFlowProvider`. In Next.js, the provider wrapper needs `'use client'`; render that wrapper from the server layout.
+
+## A confirmation action stays busy
+
+The flow remains busy while its confirmation is open and while its async action is still settling after cancellation. Pass the supplied `signal` to abort-aware work and call `throwIfCancelled()` between sequential side effects.
+
+## A success or error toast appears unexpectedly
+
+Set `feedback: 'inline'` or `feedback: 'none'` on the action, or provide notification adapters. A retained dialog presents its own pending/error state even when separate result notifications are disabled.
+
+## The action reports success for an HTTP error
+
+`fetch()` resolves for HTTP 4xx and 5xx. Check `response.ok` and throw or return a typed domain result from the action.
+
+## A custom confirmation adapter cannot show pending/error states
+
+Use a retained-session adapter when an action sets `closeOnConfirm: false`. The ordinary `confirm` adapter only supplies a yes/no decision.
