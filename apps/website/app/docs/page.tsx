@@ -1,5 +1,11 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { docSections, DocsNav } from '../../lib/docs';
+
+export const metadata: Metadata = {
+  title: 'Documentation',
+  description: 'Browse the react-submit-flow guides, concepts, API reference, integrations, and troubleshooting help.',
+};
 
 export default function DocsIndex() {
   return (

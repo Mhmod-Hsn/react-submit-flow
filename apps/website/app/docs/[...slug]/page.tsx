@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { docs, DocsNav } from '../../../lib/docs';
 
 type PageProps = { params: Promise<{ slug: string[] }> };
@@ -12,14 +12,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug: segments } = await params;
   const slug = segments.join('/');
   const page = docs.find((item) => item.slug === slug);
-  return { title: page?.title ?? 'Documentation' };
+  return {
+    title: page?.title ?? 'Documentation',
+    description: page?.description ?? 'Guides and API reference for react-submit-flow.',
+  };
 }
 
 export default async function DocPage({ params }: PageProps) {
   const { slug: segments } = await params;
   const slug = segments.join('/');
   const page = docs.find((item) => item.slug === slug);
-  if (!page) return <div className="docs-shell"><section className="docs-content"><h1>Page not found</h1><Link href="/docs">Back to docs</Link></section></div>;
+  if (!page) notFound();
   const { Content } = page;
   return (
     <div className="docs-shell">

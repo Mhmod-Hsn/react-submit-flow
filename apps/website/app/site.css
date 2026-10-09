@@ -93,6 +93,12 @@ h1 span { color: var(--green); font-family: var(--serif); font-weight: 400; font
 .recipe-note, .example-note { margin-block: 20px; padding: 15px 18px; border-left: 3px solid #97b59f; background: #f2f6f1; color: #52625a; font-size: 13px; }
 .example-note { border-left-color: #d8c27c; background: #fbf8ed; }
 .text-link { color: var(--green); font-weight: 700; }
+.not-found-shell { display: grid; width: min(1050px, calc(100% - 48px)); min-height: 68vh; margin: 0 auto; place-items: center; }
+.not-found-content { max-width: 600px; padding: 72px 0; text-align: center; }
+.not-found-content .section-kicker { display: inline-block; padding: 8px 12px; border: 1px solid var(--line); border-radius: 99px; background: var(--mint); }
+.not-found-content h1 { margin: 22px 0 16px; font-size: clamp(46px, 7vw, 72px); }
+.not-found-content p { max-width: 440px; margin: 0 auto 25px; color: var(--muted); line-height: 1.75; }
+.not-found-content .hero-actions { justify-content: center; flex-wrap: wrap; }
 html[data-theme="high-contrast"] body, html[data-theme="high-contrast"] .site-header, html[data-theme="high-contrast"] .hero-demo, html[data-theme="high-contrast"] .demo-card, html[data-theme="high-contrast"] .feature-grid article, html[data-theme="high-contrast"] .button-light, html[data-theme="high-contrast"] .code-strip pre, html[data-theme="high-contrast"] .docs-content pre, html[data-theme="high-contrast"] .example-link { background: #fff; color: #000; border-color: #000; box-shadow: none; }
 html[data-theme="high-contrast"] .brand-mark, html[data-theme="high-contrast"] .button-dark, html[data-theme="high-contrast"] .demo-primary, html[data-theme="high-contrast"] .demo-actions .sf-button { background: #003eaa; color: #fff; }
 html[data-theme="high-contrast"] a:focus-visible, html[data-theme="high-contrast"] button:focus-visible, html[data-theme="high-contrast"] select:focus-visible { outline: 3px solid #003eaa; outline-offset: 3px; }

@@ -1,5 +1,11 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { LiveDemo } from '../components/live-demo';
+
+export const metadata: Metadata = {
+  title: 'Typed async actions for React',
+  description: 'Coordinate pending states, confirmations, success, errors, and cancellation with typed React action flows.',
+};
 
 const code = `const flow = useSubmitFlow({
   save: {

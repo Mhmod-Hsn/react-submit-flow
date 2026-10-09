@@ -12,7 +12,10 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const example = examples.find((item) => item.slug === slug);
-  return { title: example?.title ?? 'Example' };
+  return {
+    title: example?.title ?? 'Example',
+    description: example?.description ?? 'A react-submit-flow example and integration recipe.',
+  };
 }
 
 export default async function ExamplePage({ params }: PageProps) {

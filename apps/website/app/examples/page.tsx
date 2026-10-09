@@ -1,7 +1,11 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { exampleGroups } from '../../lib/examples';
 
-export const metadata = { title: 'Examples' };
+export const metadata: Metadata = {
+  title: 'Examples',
+  description: 'Explore interactive react-submit-flow demos and integration recipes for forms, actions, dialogs, and custom UI.',
+};
 
 export default function ExamplesPage() {
   return (
