@@ -342,7 +342,7 @@ Select a preset on the root element:
 <html data-theme="forest">
 ```
 
-The presets follow the system color scheme. The UI exposes `sf-*` class names and `data-state`, `data-variant`, and `data-size` attributes. Override tokens such as `--sf-accent`, `--sf-danger`, `--sf-dialog-sm`, `--sf-dialog-md`, and `--sf-dialog-lg`. Use logical CSS properties and inherited `dir="rtl"` for right-to-left layouts.
+The presets follow the system color scheme and support an explicit `data-color-mode="dark"` on the root element for apps with a manual theme toggle. The UI exposes `sf-*` class names and `data-state`, `data-variant`, and `data-size` attributes. Override tokens such as `--sf-accent`, `--sf-danger`, `--sf-dialog-sm`, `--sf-dialog-md`, and `--sf-dialog-lg`. Use logical CSS properties and inherited `dir="rtl"` for right-to-left layouts.
 
 ## Integrations
 

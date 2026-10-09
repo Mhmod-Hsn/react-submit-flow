@@ -37,7 +37,18 @@
 :root[data-theme="high-contrast"] .sf-dialog[data-variant="success"] { --sf-primary-background: var(--sf-success); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-success); }
 :root[data-theme="high-contrast"] .sf-dialog[data-variant="info"] { --sf-primary-background: var(--sf-info); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-info); }
 
+:root[data-theme="high-contrast"][data-color-mode="dark"] {
+  color-scheme: dark;
+  --sf-accent: #9fc1ff;
+  --sf-danger: #ffb4ab;
+  --sf-warning: #f5c36a;
+  --sf-success: #85e0a1;
+  --sf-info: #9fc1ff;
+  --sf-primary-foreground: #000;
+}
+:root[data-theme="high-contrast"][data-color-mode="dark"] .sf-dialog .sf-button-primary { background: CanvasText; color: Canvas; }
+
 @media (prefers-color-scheme: dark) {
-  :root[data-theme="high-contrast"] { color-scheme: dark; --sf-accent: #9fc1ff; --sf-danger: #ffb4ab; --sf-warning: #f5c36a; --sf-success: #85e0a1; --sf-info: #9fc1ff; --sf-primary-foreground: #000; }
-  :root[data-theme="high-contrast"] .sf-dialog .sf-button-primary { background: CanvasText; color: Canvas; }
+  :root[data-theme="high-contrast"]:not([data-color-mode="light"]) { color-scheme: dark; --sf-accent: #9fc1ff; --sf-danger: #ffb4ab; --sf-warning: #f5c36a; --sf-success: #85e0a1; --sf-info: #9fc1ff; --sf-primary-foreground: #000; }
+  :root[data-theme="high-contrast"]:not([data-color-mode="light"]) .sf-dialog .sf-button-primary { background: CanvasText; color: Canvas; }
 }

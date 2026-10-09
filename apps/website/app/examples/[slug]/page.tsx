@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { examples } from '../../../lib/examples';
+import { ExampleCodeToggle } from '../../../components/example-code-toggle';
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -33,8 +34,7 @@ export default async function ExamplePage({ params }: PageProps) {
       <h1>{example.title}</h1>
       <p>{example.description}</p>
       {Demo ? <Demo /> : <div className="recipe-note">This integration recipe is not installed in the docs app. Copy the pattern into a project with the named integration dependency.</div>}
-      <h2>Usage</h2>
-      <pre className="code-block"><code>{example.code}</code></pre>
+      <ExampleCodeToggle title={example.title} shortCode={example.code} fullCode={example.fullCode} />
       <p><Link className="text-link" href={example.docHref}>Read the related guide →</Link></p>
       {example.runnable ? <p className="example-note">This demo uses a local, temporary action. It does not send data or write to a service.</p> : null}
     </article>

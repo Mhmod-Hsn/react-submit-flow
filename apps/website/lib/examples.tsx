@@ -19,12 +19,15 @@ export interface Example {
   group: string;
   description: string;
   code: string;
+  fullCode: string;
   Demo?: ComponentType;
   docHref: string;
   runnable: boolean;
 }
 
-export const examples: Example[] = [
+type ExampleDefinition = Omit<Example, 'fullCode'>;
+
+const exampleDefinitions: ExampleDefinition[] = [
   {
     slug: 'basic-form', title: 'Basic form: success and failure', group: 'Actions and forms',
     description: 'Submit a typed form, inspect the pending state, and toggle a simulated server error.',
@@ -122,6 +125,369 @@ export const examples: Example[] = [
     code: `import 'react-submit-flow/styles.css'\nimport 'react-submit-flow/themes/forest.css'\n\n<html data-theme="forest">\n  <body dir="rtl">…</body>\n</html>`,
   },
 ];
+
+const fullCodeBySlug: Record<string, string> = {
+  'basic-form': `import { SubmitButton, SubmitFlowForm, useSubmitFlow } from 'react-submit-flow'
+
+type Profile = { name: string }
+
+async function saveProfile(profile: Profile, signal: AbortSignal) {
+  const response = await fetch('/api/profile', {
+    method: 'POST',
+    signal,
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(profile),
+  })
+  if (!response.ok) throw new Error('Could not save profile')
+  return response.json() as Promise<{ id: string; name: string }>
+}
+
+export function ProfileForm() {
+  const flow = useSubmitFlow({
+    save: {
+      run: (input: Profile, { signal }) => saveProfile(input, signal),
+      pendingLabel: 'Saving profile…',
+      success: 'Profile saved.',
+      error: 'The example request failed.',
+    },
+  })
+
+  return (
+    <SubmitFlowForm flow={flow} defaultAction="save"
+      getInput={{ save: (data) => ({ name: String(data.get('name') ?? '') }) }}>
+      <label>Name <input name="name" required /></label>
+      <SubmitButton action="save">Save changes</SubmitButton>
+    </SubmitFlowForm>
+  )
+}`,
+  'multi-action': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+type Draft = { id: string; title: string }
+
+export function DraftActions({ draft }: { draft: Draft }) {
+  const flow = useSubmitFlow({
+    save: {
+      run: async (input: Draft) => ({ ...input, saved: true }),
+      pendingLabel: 'Saving…',
+      success: 'Draft saved.',
+    },
+    publish: {
+      run: async (input: Draft) => ({ ...input, published: true }),
+      confirm: { title: 'Publish this draft?', description: 'Visitors can see it.' },
+      pendingLabel: 'Publishing…',
+      success: (result: Draft & { published: boolean }) => result.title + ' is live.',
+    },
+  })
+
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="save" input={draft}>Save draft</ActionButton>
+    <ActionButton action="publish" input={draft}>Publish</ActionButton>
+  </SubmitFlowRoot>
+}`,
+  'delete-confirmation': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+export function DeleteDraft({ id, title }: { id: string; title: string }) {
+  const flow = useSubmitFlow({
+    remove: {
+      run: async (input: { id: string }) => {
+        const response = await fetch('/api/drafts/' + input.id, { method: 'DELETE' })
+        if (!response.ok) throw new Error('Delete failed')
+        return { id: input.id }
+      },
+      confirm: {
+        title: 'Delete “' + title + '”?',
+        description: 'This action cannot be undone.',
+        destructive: true,
+        confirmLabel: 'Delete draft',
+      },
+      success: 'Draft deleted.',
+      error: 'Could not delete this draft.',
+    },
+  })
+
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="remove" input={{ id }}>Delete draft</ActionButton>
+  </SubmitFlowRoot>
+}`,
+  'cancel-request': `import { ActionButton, CancelButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+export function ImportButton() {
+  const flow = useSubmitFlow({
+    importData: {
+      run: async (_input: void, { signal }) => {
+        const response = await fetch('/api/import', { method: 'POST', signal })
+        if (!response.ok) throw new Error('Import failed')
+        return response.json() as Promise<{ imported: number }>
+      },
+      pendingLabel: 'Importing…',
+      success: (result: { imported: number }) => result.imported + ' records imported.',
+    },
+  })
+
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="importData">Start import</ActionButton>
+    <CancelButton>Cancel import</CancelButton>
+    <p role="status">{flow.status}</p>
+  </SubmitFlowRoot>
+}`,
+  'cancel-back-navigation': `import { useState } from 'react'
+import { ActionButton, BackButton, CancelButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+export function EditActions({ onBack }: { onBack: () => void }) {
+  const [message, setMessage] = useState('')
+  const flow = useSubmitFlow({ save: { run: async () => saveChanges(), pendingLabel: 'Saving…' } })
+
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="save">Save</ActionButton>
+    <CancelButton onCancel={() => setMessage('Cancelled')}>Cancel</CancelButton>
+    <BackButton onBack={onBack}>Back</BackButton>
+    <p role="status">{message}</p>
+  </SubmitFlowRoot>
+}`,
+  'chained-steps': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+export function CreateAndNotify() {
+  const flow = useSubmitFlow({
+    createAndNotify: {
+      run: async (input: { title: string }, { signal, throwIfCancelled }) => {
+        const record = await createRecord(input, { signal })
+        throwIfCancelled()
+        await sendNotification(record.id, { signal })
+        return record
+      },
+      pendingLabel: 'Creating…',
+      success: (record: { id: string }) => 'Created record ' + record.id,
+    },
+  })
+
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="createAndNotify" input={{ title: 'Launch plan' }}>
+      Create and notify
+    </ActionButton>
+  </SubmitFlowRoot>
+}`,
+  'independent-flows': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+function DraftForm() {
+  const flow = useSubmitFlow({ save: { run: async () => saveDraft() } })
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="save">Save draft</ActionButton>
+    <span>{flow.status}</span>
+  </SubmitFlowRoot>
+}
+
+function PreviewForm() {
+  const flow = useSubmitFlow({ preview: { run: async () => buildPreview() } })
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="preview">Build preview</ActionButton>
+    <span>{flow.status}</span>
+  </SubmitFlowRoot>
+}
+
+export function WorkspaceActions() {
+  return <><DraftForm /><PreviewForm /></>
+}`,
+  'nested-dialog-confirmation': `import { useSubmitFeedback } from 'react-submit-flow'
+
+export function DialogForm() {
+  const feedback = useSubmitFeedback()
+
+  async function save() {
+    const accepted = await feedback.confirm({
+      title: 'Save these changes?',
+      outsidePress: false,
+    })
+    if (!accepted) return
+    await saveChanges()
+  }
+
+  return <form onSubmit={(event) => { event.preventDefault(); void save() }}>
+    <input name="title" />
+    <button type="submit">Save</button>
+  </form>
+}
+
+// Mount DialogForm under SubmitFlowProvider and your modal provider.
+// Verify focus restoration and keyboard behavior for your modal stack.`,
+  'rhf-validation': `import { useForm } from 'react-hook-form'
+import { SubmitFeedback, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+type Values = { email: string }
+
+export function InviteForm() {
+  const form = useForm<Values>()
+  const flow = useSubmitFlow({
+    invite: { run: (values: Values) => sendInvite(values), success: 'Invite sent.' },
+  })
+
+  return <SubmitFlowRoot flow={flow}>
+    <form onSubmit={form.handleSubmit(async (values) => {
+      const result = await flow.run('invite', values)
+      if (result.status === 'success') form.reset()
+    })}>
+      <input {...form.register('email', { required: true })} />
+      {form.formState.errors.email && <p role="alert">Email is required</p>}
+      <button type="submit" disabled={flow.isBusy}>Invite</button>
+      <SubmitFeedback />
+    </form>
+  </SubmitFlowRoot>
+}`,
+  'tanstack-mutation': `import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+export function ProfileSave({ profile }: { profile: Profile }) {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({ mutationFn: updateProfile })
+  const flow = useSubmitFlow({
+    save: {
+      run: async (input: Profile) => {
+        const saved = await mutation.mutateAsync(input)
+        await queryClient.invalidateQueries({ queryKey: ['profile'] })
+        return saved
+      },
+      success: 'Profile updated.',
+      feedback: 'none', // Use this if the mutation already notifies.
+    },
+  })
+
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="save" input={profile}>Save profile</ActionButton>
+  </SubmitFlowRoot>
+}`,
+  'server-function': `// actions.ts
+'use server'
+export async function saveProfile(input: ProfileInput) {
+  await requireCurrentUser()
+  return updateProfile(input)
+}
+
+// profile-form.tsx
+'use client'
+import { saveProfile } from './actions'
+import { useSubmitFlow } from 'react-submit-flow'
+
+export function ProfileForm() {
+  const flow = useSubmitFlow({
+    save: {
+      run: async (input: ProfileInput) => {
+        const result = await saveProfile(input)
+        if (!result.ok) throw new Error(result.code)
+        return result.profile
+      },
+      error: (error) => error instanceof Error && error.message === 'NAME_TAKEN'
+        ? 'Choose a different name.'
+        : 'Could not save the profile.',
+    },
+  })
+  return <button disabled={flow.isBusy} onClick={() => void flow.run('save', values)}>
+    {flow.isBusy ? 'Saving…' : 'Save'}
+  </button>
+}`,
+  'headless-ui': `import { useSubmitFlow } from 'react-submit-flow/headless'
+
+export function CustomSave({ input }: { input: { title: string } }) {
+  const flow = useSubmitFlow({
+    save: {
+      run: async (value: { title: string }) => saveDraft(value),
+      pendingLabel: 'Saving…',
+    },
+  })
+
+  return <>
+    <button disabled={flow.isBusy} onClick={() => void flow.run('save', input)}>
+      {flow.isBusy ? flow.pendingLabel : 'Save'}
+    </button>
+    <p role={flow.status === 'error' ? 'alert' : 'status'}>{flow.status}</p>
+  </>
+}`,
+  'standalone-dialogs': `import { useSubmitFeedback } from 'react-submit-flow'
+
+export function ExportButton() {
+  const feedback = useSubmitFeedback()
+
+  async function exportData() {
+    const accepted = await feedback.confirm({
+      title: 'Start export?',
+      description: 'Create a downloadable snapshot.',
+      confirmLabel: 'Export',
+    })
+    if (!accepted) return
+    const result = await createExport()
+    await feedback.alert({
+      title: 'Export ready',
+      description: 'Your export contains ' + result.count + ' records.',
+      variant: 'success',
+      acknowledgeLabel: 'Done',
+    })
+  }
+
+  return <button type="button" onClick={() => void exportData()}>Export</button>
+}`,
+  'dialog-options': `import { useSubmitFeedback } from 'react-submit-flow'
+
+export function ContinueButton() {
+  const feedback = useSubmitFeedback()
+
+  async function continueFlow() {
+    const accepted = await feedback.confirm({
+      title: 'Continue with these changes?',
+      description: 'Review this summary before continuing.',
+      variant: 'warning',
+      size: 'md',
+      width: 'min(36rem, calc(100vw - 2rem))',
+      closeOnEscape: true,
+      outsidePress: false,
+      confirmLabel: 'Continue',
+      cancelLabel: 'Review again',
+      content: <p>Three settings will be updated.</p>,
+    })
+    if (accepted) await continueAction()
+  }
+
+  return <button type="button" onClick={() => void continueFlow()}>Continue</button>
+}`,
+  'retained-confirmation': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+
+export function PublishButton() {
+  const flow = useSubmitFlow({
+    publish: {
+      run: async (input: { id: string }, { signal }) => {
+        const response = await fetch('/api/publish/' + input.id, { method: 'POST', signal })
+        if (!response.ok) throw new Error('Publish failed')
+        return response.json() as Promise<{ url: string }>
+      },
+      confirm: { title: 'Publish this update?', confirmLabel: 'Publish' },
+      closeOnConfirm: false,
+      pendingLabel: 'Publishing…',
+      error: 'The publish failed. Close this dialog and start a new attempt.',
+    },
+  })
+
+  return <SubmitFlowRoot flow={flow}>
+    <ActionButton action="publish" input={{ id: 'draft-1' }}>Publish</ActionButton>
+  </SubmitFlowRoot>
+}`,
+  'theme-rtl': `// app/layout.tsx
+import 'react-submit-flow/styles.css'
+import 'react-submit-flow/themes/forest.css'
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <html lang="ar" dir="rtl" data-theme="forest">
+    <body>{children}</body>
+  </html>
+}
+
+/* Or define tokens in your own stylesheet. */
+:root {
+  --sf-accent: #347a58;
+  --sf-danger: #b42318;
+}`,
+};
+
+export const examples: Example[] = exampleDefinitions.map((example) => ({
+  ...example,
+  fullCode: fullCodeBySlug[example.slug] ?? example.code,
+}));
 
 export const exampleGroups = [...new Set(examples.map((example) => example.group))].map((title) => ({
   title,
