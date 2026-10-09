@@ -2,6 +2,7 @@
   "name": "react-submit-flow",
   "version": "0.1.0",
   "description": "Typed async action flows with accessible, customizable React feedback.",
+  "homepage": "https://mhmod-hsn.github.io/react-submit-flow/",
   "license": "MIT",
   "type": "module",
   "files": ["dist", "README.md", "LICENSE"],
