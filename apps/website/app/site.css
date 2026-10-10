@@ -93,6 +93,19 @@ h1 span { color: var(--green-text); font-family: var(--serif); font-weight: 400;
 .dialog-preview { padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-soft); color: var(--ink); }
 .dialog-preview p { margin-block: 8px; }
 .dialog-preview a { color: var(--green); font-weight: 650; }
+.sf-dialog.three-action-dialog { width: min(36rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 28px; overflow-y: auto; background: var(--sf-dialog-background); color: var(--sf-dialog-foreground); border-color: var(--sf-dialog-border-color); }
+.three-action-dialog::backdrop { background: rgb(10 18 30 / .5); }
+.three-action-dialog .three-action-title { margin: 12px 0; color: inherit; font-size: 25px; line-height: 1.25; }
+.three-action-dialog .sf-dialog-description { line-height: 1.65; }
+.three-action-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 24px; }
+.three-action-footer .sf-button { min-height: 42px; padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.three-action-dialog .three-action-footer .sf-button-primary { background: var(--green); color: var(--accent-foreground); border-color: var(--green); }
+.three-action-footer .three-action-cancel { margin-inline-end: auto; }
+.three-action-footer .three-action-danger { color: color-mix(in srgb, var(--sf-danger) 60%, var(--ink)); border-color: currentColor; }
+.three-action-footer .sf-button:disabled { opacity: .6; cursor: wait; }
+.three-action-dialog .sf-feedback { margin-top: 16px; font-size: 13px; line-height: 1.6; }
+.three-action-dialog .sf-feedback[data-state="error"] { color: color-mix(in srgb, var(--sf-danger) 60%, var(--ink)); }
+@media (max-width: 420px) { .sf-dialog.three-action-dialog { padding: 20px; } .three-action-footer { flex-direction: column-reverse; align-items: stretch; } .three-action-footer .three-action-cancel { margin-inline-end: 0; } }
 .code-block { overflow-x: auto; margin-block: 18px; padding: 20px; border: 1px solid #26382f; border-radius: 12px; background: #17231e; color: #e5f1e9; font-size: 13px; line-height: 1.65; }
 .example-code-view { margin-top: 42px; }
 .example-code-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }

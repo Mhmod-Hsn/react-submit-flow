@@ -37,6 +37,14 @@ Escape closes an undecided dialog by default. Backdrop presses are ignored unles
 
 Built-in dialogs use the browser's native `<dialog>` element. The current docs site does not claim tested focus restoration when nested inside another dialog library. If your app has its own modal stack, use an adapter that integrates with that stack and verify focus, Escape, and outside-click behavior there.
 
+## Dialogs with three actions
+
+For choices such as **Save / Discard / Cancel** or **Save draft / Publish / Cancel**, render your own dialog with `SubmitFlowRoot`, two `ActionButton` controls, and a `CancelButton`. The two async actions share one flow lock, so starting either disables both action buttons and shows its pending label. Set `feedback: 'inline'` on each action and render `SubmitFeedback` inside the dialog to display progress and errors.
+
+Close your dialog from each action's `onSuccess` callback. Leave it open on failure so the user can retry or choose the other action. While busy, `CancelButton` requests cancellation; while idle, its `onCancel` callback can close the dialog. In these examples, Escape closes only while idle, and the backdrop keeps the dialog open. The custom dialog owns its accessible title, focus management, and dismissal behavior.
+
+Try the [unsaved changes dialog](/examples/unsaved-changes-dialog) and the [release review dialog](/examples/publish-dialog), including its simulated publish failure.
+
 ## Keep a confirmation open while saving
 
 For a provider-wide default, set `dialogDefaults={{ closeOnConfirm: false }}` on `SubmitFlowProvider`. A per-action `closeOnConfirm` value overrides that default. Without a provider default, the behavior can still be enabled for one action:
