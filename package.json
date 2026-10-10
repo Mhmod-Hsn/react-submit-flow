@@ -8,7 +8,7 @@
     "build": "pnpm --filter react-submit-flow build && pnpm --filter @react-submit-flow/website build",
     "build:package": "pnpm --filter react-submit-flow build",
     "build:website": "pnpm --filter @react-submit-flow/website build",
-    "typecheck": "pnpm --filter react-submit-flow typecheck && pnpm --filter @react-submit-flow/website typecheck",
+    "typecheck": "pnpm --filter react-submit-flow build:types && pnpm --filter react-submit-flow typecheck && pnpm --filter @react-submit-flow/website typecheck",
     "lint": "pnpm --filter react-submit-flow lint && pnpm --filter @react-submit-flow/website lint",
     "check": "pnpm typecheck && pnpm lint && pnpm build",
     "test": "pnpm --filter react-submit-flow test",

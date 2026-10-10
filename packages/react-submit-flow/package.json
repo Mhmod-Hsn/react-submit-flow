@@ -1,6 +1,6 @@
 {
   "name": "react-submit-flow",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Typed async action flows with accessible, customizable React feedback.",
   "homepage": "https://mhmod-hsn.github.io/react-submit-flow/",
   "license": "MIT",
@@ -40,6 +40,7 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "node scripts/clean.mjs && tsc -p tsconfig.build.json && vite build && node scripts/copy-css.mjs",
+    "build:types": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint src",
     "test": "echo 'Tests are not configured yet.'",
