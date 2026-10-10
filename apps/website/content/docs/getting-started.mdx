@@ -6,6 +6,8 @@ Install the library and peer dependencies:
 pnpm add react-submit-flow react react-dom
 ```
 
+If React and React DOM are already installed in your application, install only `react-submit-flow`. It adds no runtime dependencies of its own; see [dependencies and bundle footprint](/docs/dependencies-and-bundle-footprint).
+
 ## Add the provider
 
 For Next.js App Router, place `SubmitFlowProvider` in a small client component and render it from the root layout. Static layout content and documentation can remain server rendered.

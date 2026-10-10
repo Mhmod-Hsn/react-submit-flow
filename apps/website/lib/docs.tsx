@@ -2,6 +2,7 @@ import type { ComponentType } from 'react';
 import Link from 'next/link';
 import Overview from '../content/docs/overview.mdx';
 import GettingStarted from '../content/docs/getting-started.mdx';
+import Dependencies from '../content/docs/dependencies-and-bundle-footprint.mdx';
 import FlowLifecycle from '../content/docs/concepts/flow-lifecycle.mdx';
 import Results from '../content/docs/concepts/results-and-errors.mdx';
 import Cancellation from '../content/docs/concepts/cancellation.mdx';
@@ -34,6 +35,7 @@ export const docSections: DocSection[] = [
   { title: 'Start here', pages: [
     { slug: 'overview', title: 'Overview', description: 'What the library does and where it fits.', Content: Overview },
     { slug: 'getting-started', title: 'Getting started', description: 'Install the package and build a first typed form.', Content: GettingStarted },
+    { slug: 'dependencies-and-bundle-footprint', title: 'Dependencies and bundle', description: 'Runtime dependencies, peer requirements, and package entry points.', Content: Dependencies },
   ] },
   { title: 'Concepts', pages: [
     { slug: 'concepts/flow-lifecycle', title: 'Flow lifecycle', description: 'Understand flow ownership, state, and duplicate prevention.', Content: FlowLifecycle },
