@@ -31,6 +31,20 @@ function DemoCard({ title, description, children }: { title: string; description
   return <section className="demo-card example-demo-card"><div className="demo-head"><span className="status-dot" />{title}</div><p>{description}</p>{children}</section>;
 }
 
+export function ConfirmFlowDemo() {
+  const flow = useSubmitFlow({
+    publish: {
+      run: async () => { await pause(900); return 'Release notes'; },
+      confirm: { title: 'Publish these notes?', description: 'They will be visible to everyone.', confirmLabel: 'Publish', variant: 'info' },
+      pendingLabel: 'Publishing…',
+      success: (item: string) => `${item} published.`,
+    },
+  });
+  return <DemoCard title="Confirm, then run" description="One button opens a confirmation popup; accepting it starts the flow.">
+    <SubmitFlowRoot flow={flow}><div className="demo-actions"><ActionButton action="publish" className="demo-primary">Publish notes</ActionButton></div><SubmitFeedback /><p className="demo-feedback" role="status">Flow: {flow.status}</p></SubmitFlowRoot>
+  </DemoCard>;
+}
+
 export function DeleteDemo() {
   const flow = useSubmitFlow({
     delete: {
@@ -78,6 +92,8 @@ export function ChainedStepsDemo() {
         throwIfCancelled();
         setStep('Sending notification…');
         await pause(700, signal);
+        throwIfCancelled();
+        setStep('Complete');
         return { id: 'sample-42' };
       },
       success: 'Record created and notification queued.',

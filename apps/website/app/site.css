@@ -119,6 +119,7 @@ h1 span { color: var(--green-text); font-family: var(--serif); font-weight: 400;
 .recipe-note, .example-note { margin-block: 20px; padding: 15px 18px; border-left: 3px solid #97b59f; background: #f2f6f1; color: #52625a; font-size: 13px; }
 .example-note { border-left-color: #d8c27c; background: #fbf8ed; }
 .text-link { color: var(--green-text); font-weight: 700; }
+.example-back-link { display: block; width: fit-content; margin-bottom: 12px; }
 .not-found-shell { display: grid; width: min(1050px, calc(100% - 48px)); min-height: 68vh; margin: 0 auto; place-items: center; }
 .not-found-content { max-width: 600px; padding: 72px 0; text-align: center; }
 .not-found-content .section-kicker { display: inline-block; padding: 8px 12px; border: 1px solid var(--line); border-radius: 99px; background: var(--mint); }
@@ -133,6 +134,7 @@ html[data-theme="high-contrast"] a:focus-visible, html[data-theme="high-contrast
 .docs-content h2, .docs-heading { margin-top: 42px; margin-bottom: 12px; color: var(--ink); font-family: var(--display); font-size: 25px; letter-spacing: -.05em; }
 .docs-content h3 { margin-top: 26px; color: var(--ink); font-size: 17px; }
 .docs-content a { color: var(--green-text); text-decoration: underline; text-underline-offset: 3px; }
+.docs-content a.example-link { text-decoration: none; }
 .docs-content code { padding: 2px 5px; border-radius: 4px; background: #eef1eb; color: #315c43; font-family: 'DM Mono', monospace; font-size: .88em; }
 .docs-content pre { overflow: auto; padding: 19px; border-radius: 10px; background: #1e2c25; color: #edf4ec; font-size: 12px; line-height: 1.7; }
 .docs-content pre code { padding: 0; background: none; color: inherit; }

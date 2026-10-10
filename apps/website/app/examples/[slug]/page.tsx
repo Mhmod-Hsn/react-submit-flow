@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { examples } from '../../../lib/examples';
+import { exampleGroups, examples } from '../../../lib/examples';
 import { ExampleCodeToggle } from '../../../components/example-code-toggle';
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -26,10 +26,13 @@ export default async function ExamplePage({ params }: PageProps) {
   const Demo = example.Demo;
   return <div className="docs-shell examples-shell">
     <aside className="docs-nav" aria-label="Examples"><Link href="/examples"><strong>All examples</strong></Link>
-      {examples.map((item) => <Link key={item.slug} href={`/examples/${item.slug}`} aria-current={item.slug === slug ? 'page' : undefined}>{item.title}</Link>)}
+      {exampleGroups.map((group) => <div className="docs-nav-section" key={group.title}>
+        <span>{group.title}</span>
+        {group.items.map((item) => <Link key={item.slug} href={`/examples/${item.slug}`} aria-current={item.slug === slug ? 'page' : undefined}>{item.title}</Link>)}
+      </div>)}
     </aside>
     <article className="docs-content">
-      <Link className="text-link" href="/examples">← All examples</Link>
+      <Link className="text-link example-back-link" href="/examples">← All examples</Link>
       <span className="section-kicker">{example.group}</span>
       <h1>{example.title}</h1>
       <p>{example.description}</p>

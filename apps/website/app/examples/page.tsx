@@ -4,7 +4,7 @@ import { exampleGroups } from '../../lib/examples';
 
 export const metadata: Metadata = {
   title: 'Examples',
-  description: 'Explore interactive react-submit-flow demos and integration recipes for forms, actions, dialogs, and custom UI.',
+  description: 'Explore compact flow examples and confirmation popup recipes for react-submit-flow.',
 };
 
 export default function ExamplesPage() {
@@ -18,8 +18,8 @@ export default function ExamplesPage() {
       </aside>
       <section className="docs-content">
         <span className="section-kicker">Runnable recipes</span>
-        <h1>Examples for the full flow.</h1>
-        <p>Explore the common action, form, dialog, and integration patterns. Runnable entries include a live demo; integration recipes include code you can adapt to your app.</p>
+        <h1>Flows and confirms.</h1>
+        <p>See how async flows work, then explore confirmation popups and dialog behavior. Each example includes runnable demos or code you can adapt.</p>
         {exampleGroups.map((group) => <section className="docs-index-section" key={group.title}>
           <h2>{group.title}</h2>
           <div className="examples-grid">{group.items.map((example) => <Link className="example-link" href={`/examples/${example.slug}`} key={example.slug}>
