@@ -10,6 +10,7 @@ import type {
   AlertOptions,
   AlertResult,
   ConfirmOptions,
+  DialogDefaults,
   DialogRequest,
   FeedbackMessage,
   ProviderOptions,
@@ -55,6 +56,10 @@ class FeedbackStore implements FeedbackBridge {
     this.options = options;
   }
 
+  getDialogDefaults(): DialogDefaults | undefined {
+    return this.options.dialogDefaults;
+  }
+
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
@@ -95,6 +100,7 @@ class FeedbackStore implements FeedbackBridge {
       destructive,
       closeOnEscape: options.closeOnEscape ?? defaults?.closeOnEscape ?? true,
       outsidePress: options.outsidePress ?? defaults?.outsidePress ?? false,
+      closeOnConfirm: options.closeOnConfirm ?? defaults?.closeOnConfirm,
       portalContainer: options.portalContainer ?? this.options.portalContainer,
       phase: 'decision',
     };
@@ -289,7 +295,7 @@ class FeedbackStore implements FeedbackBridge {
 }
 
 export function SubmitFlowProvider(options: ProviderOptions) {
-  const { children, className } = options;
+  const { children, className, dir } = options;
   const storeRef = useRef<FeedbackStore | null>(null);
   if (!storeRef.current) storeRef.current = new FeedbackStore();
   const store = storeRef.current;
@@ -299,18 +305,18 @@ export function SubmitFlowProvider(options: ProviderOptions) {
   return (
     <FeedbackBridgeContext.Provider value={store}>
       {children}
-      <FeedbackHost store={store} className={className} />
+      <FeedbackHost store={store} className={className} dir={dir} />
     </FeedbackBridgeContext.Provider>
   );
 }
 
-function FeedbackHost({ store, className }: { store: FeedbackStore; className?: string }) {
+function FeedbackHost({ store, className, dir }: { store: FeedbackStore; className?: string; dir?: 'ltr' | 'rtl' | 'auto' }) {
   const snapshot = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot);
   const request = snapshot.active;
   return (
     <>
-      {request ? <DialogLayer store={store} request={request} /> : null}
-      <div className={className} data-sf-toast-host="" aria-label="Notifications" style={toastHostStyle}>
+      {request ? <DialogLayer store={store} request={request} dir={dir} /> : null}
+      <div dir={dir} className={className} data-sf-toast-host="" aria-label="Notifications" style={toastHostStyle}>
         {store.visibleToasts().map((toast) => (
           <div
             key={toast.id}
@@ -333,7 +339,7 @@ function FeedbackHost({ store, className }: { store: FeedbackStore; className?: 
   );
 }
 
-function DialogLayer({ store, request }: { store: FeedbackStore; request: DialogRequest }) {
+function DialogLayer({ store, request, dir }: { store: FeedbackStore; request: DialogRequest; dir?: 'ltr' | 'rtl' | 'auto' }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = `sf-title-${request.id}`;
   const descriptionId = `sf-description-${request.id}`;
@@ -354,6 +360,7 @@ function DialogLayer({ store, request }: { store: FeedbackStore; request: Dialog
   return (
     <dialog
       ref={dialogRef}
+      dir={dir}
       className="sf-native-dialog"
       data-variant={request.variant}
       data-size={request.size}
@@ -396,7 +403,10 @@ function DialogActions({ store, request }: { store: FeedbackStore; request: Dial
     return (
       <div className="sf-dialog-actions" style={actionsStyle}>
         <p role="status" aria-live="polite" className="sf-dialog-status" style={{ margin: 0, flex: 1 }}>{request.phaseMessage ?? 'Working…'}</p>
-        {request.phase === 'pending' ? <button type="button" className="sf-button" onClick={() => store.cancelExecution(request.id)} style={buttonStyle}>Cancel action</button> : null}
+        {request.phase === 'pending' ? <button type="button" autoFocus className="sf-button" onClick={() => store.cancelExecution(request.id)} style={buttonStyle}>Cancel action</button> : null}
+        <button type="button" className="sf-button sf-button-primary" disabled aria-busy="true" style={buttonPrimaryStyle}>
+          {request.phaseMessage ?? (request.phase === 'cancelling' ? 'Cancelling…' : 'Working…')}
+        </button>
       </div>
     );
   }

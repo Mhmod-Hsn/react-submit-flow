@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import type { AlertOptions, AlertResult, ConfirmOptions, FeedbackMessage } from '../types';
+import type { AlertOptions, AlertResult, ConfirmOptions, DialogDefaults, FeedbackMessage } from '../types';
 
 export interface ModalHandle<T> {
   decision: Promise<T>;
@@ -11,6 +11,7 @@ export interface ModalHandle<T> {
 }
 
 export interface FeedbackBridge {
+  getDialogDefaults(): DialogDefaults | undefined;
   confirm(
     options: ConfirmOptions,
     metadata: { id: string; ownerId: string; action?: string; signal?: AbortSignal; cancel?: () => void },

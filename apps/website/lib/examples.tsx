@@ -5,10 +5,12 @@ import {
   CancelRequestDemo,
   ChainedStepsDemo,
   DeleteDemo,
+  DialogDismissalDemo,
   DialogOptionsDemo,
   HeadlessDemo,
   IndependentFlowsDemo,
   NavigationDemo,
+  RichDialogDemo,
   RetainedErrorDemo,
   ThemeRtlDemo,
 } from '../components/example-demos';
@@ -101,28 +103,40 @@ const exampleDefinitions: ExampleDefinition[] = [
     code: `import { useSubmitFlow } from 'react-submit-flow/headless'\n\n<button disabled={flow.isBusy} onClick={() => void flow.run('save', input)}>\n  {flow.isBusy ? 'Saving…' : 'Save'}\n</button>`,
   },
   {
-    slug: 'standalone-dialogs', title: 'Standalone confirm and alert', group: 'Dialogs and feedback',
+    slug: 'standalone-dialogs', title: 'Standalone confirm and alert', group: 'Dialogs',
     description: 'Ask for confirmation or acknowledgement outside a form.',
     docHref: '/docs/api/provider-and-feedback', runnable: true, Demo: DialogDemo,
     code: `const confirmed = await feedback.confirm({\n  title: 'Remove this draft?',\n  destructive: true,\n})\nif (confirmed) await removeDraft()\n\nconst result = await feedback.alert({ title: 'Export ready' })`,
   },
   {
-    slug: 'dialog-options', title: 'Dialog variants and sizes', group: 'Dialogs and feedback',
+    slug: 'dialog-options', title: 'Dialog variants and sizes', group: 'Dialogs',
     description: 'Try the supported variants and responsive sizes in the built-in dialog.',
     docHref: '/docs/dialogs', runnable: true, Demo: DialogOptionsDemo,
     code: `await feedback.confirm({\n  title: 'Continue?',\n  variant: 'warning',\n  size: 'md',\n  closeOnEscape: true,\n  outsidePress: false,\n})`,
   },
   {
-    slug: 'retained-confirmation', title: 'Retained confirmation and error', group: 'Dialogs and feedback',
+    slug: 'dialog-dismissal', title: 'Escape and outside dismissal', group: 'Dialogs',
+    description: 'Configure Escape and backdrop dismissal independently and observe the boolean result.',
+    docHref: '/docs/dialogs', runnable: true, Demo: DialogDismissalDemo,
+    code: `const result = await feedback.confirm({\n  title: 'Review these changes?',\n  closeOnEscape: false,\n  outsidePress: true,\n})\n// Escape stays open; clicking outside resolves false.`,
+  },
+  {
+    slug: 'rich-dialog-content', title: 'Rich dialog preview', group: 'Dialogs',
+    description: 'Add structured React content with plain-text accessible title and description.',
+    docHref: '/docs/dialogs', runnable: true, Demo: RichDialogDemo,
+    code: `await feedback.confirm({\n  title: 'Publish release notes?',\n  description: 'Review the summary before publishing.',\n  size: 'lg',\n  content: <ReleasePreview />,\n})`,
+  },
+  {
+    slug: 'retained-confirmation', title: 'Retained confirmation and error', group: 'Dialogs',
     description: 'Keep the dialog open during execution and show an error without retrying.',
     docHref: '/docs/dialogs', runnable: true, Demo: RetainedErrorDemo,
     code: `publish: {\n  run: publishDraft,\n  confirm: { title: 'Publish now?' },\n  closeOnConfirm: false,\n  pendingLabel: 'Publishing…',\n}`, 
   },
   {
     slug: 'theme-rtl', title: 'Theme tokens and RTL', group: 'Customization',
-    description: 'Use optional theme presets or inherit right-to-left text direction.',
+    description: 'Use an optional theme and render provider-owned dialogs and notifications in right-to-left layouts.',
     docHref: '/docs/styling', runnable: true, Demo: ThemeRtlDemo,
-    code: `import 'react-submit-flow/styles.css'\nimport 'react-submit-flow/themes/forest.css'\n\n<html data-theme="forest">\n  <body dir="rtl">…</body>\n</html>`,
+    code: `import 'react-submit-flow/styles.css'\nimport 'react-submit-flow/themes/forest.css'\n\n<SubmitFlowProvider dir="rtl">\n  <ArabicPage />\n</SubmitFlowProvider>`,
   },
 ];
 
@@ -445,6 +459,51 @@ export function ContinueButton() {
   }
 
   return <button type="button" onClick={() => void continueFlow()}>Continue</button>
+}`,
+  'dialog-dismissal': `import { useState } from 'react'
+import { useSubmitFeedback } from 'react-submit-flow'
+
+export function DismissalControls() {
+  const feedback = useSubmitFeedback()
+  const [result, setResult] = useState('')
+
+  async function ask(options: { closeOnEscape?: boolean; outsidePress?: boolean }) {
+    const accepted = await feedback.confirm({
+      title: 'Review these changes?',
+      description: 'Try Escape, the backdrop, or an explicit choice.',
+      ...options,
+    })
+    setResult(accepted ? 'Confirmed' : 'Dismissed or cancelled')
+  }
+
+  return <>
+    <button onClick={() => void ask({ closeOnEscape: true, outsidePress: false })}>
+      Escape closes
+    </button>
+    <button onClick={() => void ask({ closeOnEscape: false, outsidePress: true })}>
+      Outside click closes
+    </button>
+    <p role="status">{result}</p>
+  </>
+}`,
+  'rich-dialog-content': `import { useSubmitFeedback } from 'react-submit-flow'
+
+export function ReleasePreviewButton() {
+  const feedback = useSubmitFeedback()
+
+  async function reviewRelease() {
+    const accepted = await feedback.confirm({
+      title: 'Publish the release notes?',
+      description: 'Review the summary before publishing.',
+      variant: 'info',
+      size: 'lg',
+      confirmLabel: 'Publish notes',
+      content: <ReleasePreview />,
+    })
+    if (accepted) await publishNotes()
+  }
+
+  return <button onClick={() => void reviewRelease()}>Preview release notes</button>
 }`,
   'retained-confirmation': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 

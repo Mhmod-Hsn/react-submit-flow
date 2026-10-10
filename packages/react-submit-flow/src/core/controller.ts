@@ -100,7 +100,9 @@ export class FlowController<T extends ActionMap> {
 
     let session: ModalHandle<boolean> | null = null;
     const confirmOptions = typeof action.confirm === 'function' ? action.confirm(input) : action.confirm;
-    const keepOpen = Boolean(confirmOptions && (action.closeOnConfirm ?? confirmOptions.closeOnConfirm) === false);
+    const providerDefault = this.getBridge()?.getDialogDefaults()?.closeOnConfirm;
+    const closeOnConfirm = action.closeOnConfirm ?? confirmOptions?.closeOnConfirm ?? providerDefault ?? true;
+    const keepOpen = Boolean(confirmOptions && !closeOnConfirm);
 
     if (confirmOptions) {
       this.patch({ status: 'confirming' });

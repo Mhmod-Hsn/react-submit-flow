@@ -6,6 +6,7 @@ import {
   BackButton,
   CancelButton,
   SubmitFeedback,
+  SubmitFlowProvider,
   SubmitFlowRoot,
   useSubmitFeedback,
   useSubmitFlow,
@@ -33,7 +34,7 @@ function DemoCard({ title, description, children }: { title: string; description
 export function DeleteDemo() {
   const flow = useSubmitFlow({
     delete: {
-      run: async (input: { name: string }) => ({ deleted: input.name }),
+      run: async (input: { name: string; }) => { await pause(2000); return { deleted: input.name }; },
       confirm: { title: 'Delete this draft?', description: 'This action cannot be undone.', destructive: true, confirmLabel: 'Delete draft' },
       success: (result: { deleted: string }) => `${result.deleted} was deleted.`,
     },
@@ -111,12 +112,55 @@ export function DialogOptionsDemo() {
   </DemoCard>;
 }
 
+export function DialogDismissalDemo() {
+  const feedback = useSubmitFeedback();
+  const [result, setResult] = useState('No prompt has been opened.');
+  const ask = async (options: { closeOnEscape?: boolean; outsidePress?: boolean; }) => {
+    const confirmed = await feedback.confirm({
+      title: 'Review these changes?',
+      description: 'Try Escape, the backdrop, or the explicit buttons to compare dismissal rules.',
+      confirmLabel: 'Keep changes',
+      cancelLabel: 'Discard changes',
+      ...options,
+    });
+    setResult(confirmed ? 'Confirmed' : 'Dismissed or cancelled');
+  };
+  return <DemoCard title="Dismissal behavior" description="Open each prompt and try its configured Escape and backdrop behavior. Dismissal always resolves false.">
+    <div className="demo-actions">
+      <button type="button" className="demo-secondary sf-button" onClick={() => void ask({ closeOnEscape: true, outsidePress: false })}>Escape closes · backdrop stays</button>
+      <button type="button" className="demo-secondary sf-button" onClick={() => void ask({ closeOnEscape: false, outsidePress: true })}>Escape stays · backdrop closes</button>
+    </div>
+    <p className="demo-feedback" aria-live="polite">{result}</p>
+  </DemoCard>;
+}
+
+export function RichDialogDemo() {
+  const feedback = useSubmitFeedback();
+  const [result, setResult] = useState('');
+  const showPreview = async () => {
+    const accepted = await feedback.confirm({
+      title: 'Publish the release notes?',
+      description: 'Review the summary before publishing.',
+      variant: 'info',
+      size: 'lg',
+      width: 'min(42rem, calc(100vw - 2rem))',
+      confirmLabel: 'Publish notes',
+      cancelLabel: 'Keep editing',
+      content: <div className="dialog-preview"><strong>Release 2.4</strong><p>Includes keyboard improvements, new themes, and clearer cancellation feedback.</p><a href="/docs/dialogs">Review dialog behavior</a></div>,
+    });
+    setResult(accepted ? 'Preview accepted.' : 'Preview dismissed.');
+  };
+  return <DemoCard title="Rich dialog content" description="Use React content for a structured summary or preview while keeping the accessible title and description plain text.">
+    <button type="button" className="demo-primary sf-button" onClick={() => void showPreview()}>Preview release notes</button>
+    <p className="demo-feedback" aria-live="polite">{result}</p>
+  </DemoCard>;
+}
+
 export function RetainedErrorDemo() {
   const flow = useSubmitFlow({
     publish: {
       run: async () => { await pause(600); throw new Error('sample failure'); },
       confirm: { title: 'Publish this update?', description: 'The sample runner will fail so you can inspect the retained error state.', confirmLabel: 'Publish' },
-      closeOnConfirm: false,
       pendingLabel: 'Publishing…',
       error: 'The simulated publish failed. Close the dialog, then start a new attempt.',
     },
@@ -137,7 +181,14 @@ export function HeadlessDemo() {
 }
 
 export function ThemeRtlDemo() {
-  return <div dir="rtl"><DemoCard title="RTL and theme tokens" description="The component uses logical layout properties and inherits text direction. Theme presets are shown on the styling guide.">
-    <p className="demo-feedback">مثال على تخطيط من اليمين إلى اليسار</p>
+  return <SubmitFlowProvider dir="rtl">
+    <RtlDialogDemo />
+  </SubmitFlowProvider>;
+}
+
+function RtlDialogDemo() {
+  const feedback = useSubmitFeedback();
+  return <div dir="rtl"><DemoCard title="العربية · من اليمين إلى اليسار" description="Provider-rendered dialogs and notifications accept dir=rtl and use logical spacing and positioning.">
+    <button type="button" className="demo-primary sf-button" onClick={() => void feedback.confirm({ title: 'هل تريد متابعة النشر؟', description: 'سيتمكن الزوار من رؤية هذه التغييرات.', confirmLabel: 'متابعة', cancelLabel: 'رجوع', variant: 'info' })}>عرض نافذة التأكيد</button>
   </DemoCard></div>;
 }

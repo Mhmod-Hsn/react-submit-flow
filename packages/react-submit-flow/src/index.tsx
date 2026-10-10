@@ -15,6 +15,7 @@ export type {
   AlertResult,
   ConfirmOptions,
   ConfirmationSession,
+  DialogDefaults,
   DialogDismissReason,
   DialogSize,
   FeedbackAdapters,

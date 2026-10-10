@@ -13,7 +13,27 @@ export function Providers({ children }: { children: React.ReactNode }) {
 }
 ```
 
-Provider props include `dialogDefaults`, `toastDuration`, `maxVisibleToasts`, `portalContainer`, and `className`. The current built-in dialog renderer uses the browser's native `<dialog>` top layer. `portalContainer` is part of the public options shape; custom adapter renderers should use it when mounting their own UI.
+Provider props include `dialogDefaults`, `toastDuration`, `maxVisibleToasts`, `portalContainer`, `className`, and `dir`. Set `dir="rtl"` when the provider-rendered feedback belongs to an RTL subtree; omit it to inherit direction from the surrounding document. The current built-in dialog renderer uses the browser's native `<dialog>` top layer. `portalContainer` is part of the public options shape; custom adapter renderers should use it when mounting their own UI.
+
+`dialogDefaults.closeOnConfirm` controls action confirmations globally. Set it to `false` to keep every action confirmation open during its action by default. An action's top-level `closeOnConfirm` overrides the confirmation's option, which overrides this provider default; the final default is `true`.
+
+```tsx
+<SubmitFlowProvider dialogDefaults={{ closeOnConfirm: false }}>
+  {children}
+</SubmitFlowProvider>
+```
+
+Now an action can omit its own setting:
+
+```tsx
+publish: {
+  run: publishDraft,
+  confirm: { title: 'Publish this draft?' },
+  pendingLabel: 'Publishing…',
+}
+```
+
+The built-in confirm button remains visible and disabled while the action is pending, displaying `pendingLabel`. Custom adapters must implement `retainedConfirmation` to support this provider-wide behavior.
 
 ## Standalone dialog hook
 

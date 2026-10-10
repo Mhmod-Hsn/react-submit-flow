@@ -26,7 +26,6 @@ export function LiveDemo() {
     publish: {
       run: async (input: { name: string }) => ({ published: input.name }),
       confirm: { title: 'Publish this profile?', description: 'Visitors will see these changes.', confirmLabel: 'Publish', variant: 'info' },
-      closeOnConfirm: false,
       pendingLabel: 'Publishing…',
       success: (result: { published: string }) => `${result.published} is now published.`,
     },

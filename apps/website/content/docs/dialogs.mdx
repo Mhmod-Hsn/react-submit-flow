@@ -39,6 +39,8 @@ Built-in dialogs use the browser's native `<dialog>` element. The current docs s
 
 ## Keep a confirmation open while saving
 
+For a provider-wide default, set `dialogDefaults={{ closeOnConfirm: false }}` on `SubmitFlowProvider`. A per-action `closeOnConfirm` value overrides that default. Without a provider default, the behavior can still be enabled for one action:
+
 ```tsx
 const flow = useSubmitFlow({
   publish: {
@@ -50,7 +52,7 @@ const flow = useSubmitFlow({
 })
 ```
 
-The action runs once after confirmation. Success closes the dialog. Cancellation shows its pending state until the action settles. Failure appears inside the dialog; closing it never retries. Start a new action explicitly to try again.
+The action runs once after confirmation. During execution, the confirm button stays visible, disabled, and displays the pending label; Cancel remains available until cancellation is requested. Success closes the dialog. Cancellation stays visible until the action settles. Failure appears inside the dialog; closing it never retries. Start a new action explicitly to try again.
 
 Do not await another provider dialog from inside a retained dialog's action; its modal queue slot is still occupied. Show all required prompts before starting the retained action.
 

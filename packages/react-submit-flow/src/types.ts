@@ -27,6 +27,10 @@ export interface AlertOptions extends Omit<ConfirmOptions, 'confirmLabel' | 'can
   acknowledgeLabel?: string;
 }
 
+export type DialogDefaults = Partial<Pick<ConfirmOptions,
+  'variant' | 'size' | 'width' | 'closeOnEscape' | 'outsidePress' | 'confirmLabel' | 'cancelLabel' | 'destructive' | 'closeOnConfirm'
+>>;
+
 export type AlertResult =
   | { status: 'acknowledged' }
   | { status: 'dismissed'; reason: DialogDismissReason };
@@ -120,9 +124,11 @@ export interface FlowOptions {
 
 export interface ProviderOptions {
   children: ReactNode;
-  dialogDefaults?: Partial<ConfirmOptions>;
+  dialogDefaults?: DialogDefaults;
   toastDuration?: number;
   maxVisibleToasts?: number;
   portalContainer?: HTMLElement | null;
   className?: string;
+  /** Direction applied to provider-rendered dialogs and notifications. Omit to inherit from the surrounding document. */
+  dir?: 'ltr' | 'rtl' | 'auto';
 }

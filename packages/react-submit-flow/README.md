@@ -221,6 +221,8 @@ An action has this shape:
 - `onSuccess`, `onError`, and `onCancel` are observers. Observer errors do not change the execution result.
 - `closeOnConfirm: false` keeps the built-in action dialog open through execution. On failure, it displays the error and offers Close; it never retries automatically.
 
+To make retained confirmations the provider-wide default, set `dialogDefaults={{ closeOnConfirm: false }}` on `SubmitFlowProvider`. An action's top-level `closeOnConfirm`, then its confirmation option, overrides the provider default. While running, the confirm button stays visible and disabled with the pending label. A custom adapter needs `retainedConfirmation` for this behavior.
+
 `FlowOptions` accepts `successMessage`, `errorMessage`, `adapters`, and `onObserverError`.
 
 ## Confirmations and standalone dialogs
@@ -274,6 +276,7 @@ The provider renders shared notifications. Success messages time out after five 
   toastDuration={5000}
   maxVisibleToasts={3}
   dialogDefaults={{ size: 'md', closeOnEscape: true }}
+  dir="rtl"
 >
   {children}
 </SubmitFlowProvider>
@@ -342,7 +345,7 @@ Select a preset on the root element:
 <html data-theme="forest">
 ```
 
-The presets follow the system color scheme and support an explicit `data-color-mode="dark"` on the root element for apps with a manual theme toggle. The UI exposes `sf-*` class names and `data-state`, `data-variant`, and `data-size` attributes. Override tokens such as `--sf-accent`, `--sf-danger`, `--sf-dialog-sm`, `--sf-dialog-md`, and `--sf-dialog-lg`. Use logical CSS properties and inherited `dir="rtl"` for right-to-left layouts.
+The presets follow the system color scheme and support an explicit `data-color-mode="dark"` on the root element for apps with a manual theme toggle. The UI exposes `sf-*` class names and `data-state`, `data-variant`, and `data-size` attributes. Override tokens such as `--sf-accent`, `--sf-danger`, `--sf-dialog-sm`, `--sf-dialog-md`, and `--sf-dialog-lg`. The provider-rendered UI inherits the page's `dir`; set `dir="rtl"` on `SubmitFlowProvider` when it serves an RTL subtree inside an LTR page. See the [RTL example](/examples/theme-rtl).
 
 ## Integrations
 

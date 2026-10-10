@@ -90,6 +90,9 @@ h1 span { color: var(--green-text); font-family: var(--serif); font-weight: 400;
 .independent-panel { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px; border: 1px solid var(--line); border-radius: 10px; }
 .independent-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .state-pill { color: var(--muted); font-size: 12px; }
+.dialog-preview { padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-soft); color: var(--ink); }
+.dialog-preview p { margin-block: 8px; }
+.dialog-preview a { color: var(--green); font-weight: 650; }
 .code-block { overflow-x: auto; margin-block: 18px; padding: 20px; border: 1px solid #26382f; border-radius: 12px; background: #17231e; color: #e5f1e9; font-size: 13px; line-height: 1.65; }
 .example-code-view { margin-top: 42px; }
 .example-code-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
