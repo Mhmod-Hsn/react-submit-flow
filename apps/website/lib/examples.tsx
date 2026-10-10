@@ -190,7 +190,7 @@ export function PublishNotes() {
         confirmLabel: 'Publish',
       },
       pendingLabel: 'Publishing…',
-      success: (item: string) => `${item} published.`,
+      success: (item: string) => \`\${item} published.\`,
     },
   });
 
