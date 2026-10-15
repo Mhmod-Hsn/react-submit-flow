@@ -1,7 +1,10 @@
-import type { ComponentType } from 'react';
-import { LiveDemo } from '../components/live-demo';
-import { DialogDemo } from '../components/dialog-demo';
-import { PublishDialogDemo, UnsavedChangesDialogDemo } from '../components/three-action-dialog-demos';
+import type { ComponentType } from "react";
+import { LiveDemo } from "../components/live-demo";
+import { DialogDemo } from "../components/dialog-demo";
+import {
+  PublishDialogDemo,
+  UnsavedChangesDialogDemo,
+} from "../components/three-action-dialog-demos";
 import {
   ConfirmFlowDemo,
   CancelRequestDemo,
@@ -15,7 +18,7 @@ import {
   RichDialogDemo,
   RetainedErrorDemo,
   ThemeRtlDemo,
-} from '../components/example-demos';
+} from "../components/example-demos";
 
 export interface Example {
   slug: string;
@@ -29,25 +32,39 @@ export interface Example {
   runnable: boolean;
 }
 
-type ExampleDefinition = Omit<Example, 'fullCode'>;
+type ExampleDefinition = Omit<Example, "fullCode">;
 
 const exampleDefinitions: ExampleDefinition[] = [
   {
-    slug: 'basic-form', title: 'Basic form: success and failure', group: 'Flows',
-    description: 'Submit a typed form, inspect the pending state, and toggle a simulated server error.',
-    docHref: '/docs/forms', runnable: true, Demo: LiveDemo,
+    slug: "basic-form",
+    title: "Basic form: success and failure",
+    group: "Flows",
+    description:
+      "Submit a typed form, inspect the pending state, and toggle a simulated server error.",
+    docHref: "/docs/forms",
+    runnable: true,
+    Demo: LiveDemo,
     code: `const flow = useSubmitFlow({\n  save: {\n    run: async (input: { name: string }, { signal }) => saveProfile(input, signal),\n    pendingLabel: 'Saving profile…',\n    success: 'Profile saved.',\n    error: 'The example request failed.',\n  },\n})\n\n<SubmitFlowForm flow={flow} defaultAction="save"\n  getInput={{ save: (data) => ({ name: String(data.get('name') ?? '') }) }}>\n  <input name="name" required />\n  <SubmitButton action="save">Save changes</SubmitButton>\n</SubmitFlowForm>`,
   },
   {
-    slug: 'multi-action', title: 'Multiple actions', group: 'Flows',
-    description: 'Give save and publish separate inputs, pending labels, confirmations, and outcomes.',
-    docHref: '/docs/api/use-submit-flow', runnable: true, Demo: LiveDemo,
+    slug: "multi-action",
+    title: "Multiple actions",
+    group: "Flows",
+    description:
+      "Give save and publish separate inputs, pending labels, confirmations, and outcomes.",
+    docHref: "/docs/api/use-submit-flow",
+    runnable: true,
+    Demo: LiveDemo,
     code: `const flow = useSubmitFlow({\n  save: { run: saveDraft, pendingLabel: 'Saving…' },\n  publish: {\n    run: publishDraft,\n    confirm: { title: 'Publish this draft?' },\n    pendingLabel: 'Publishing…',\n  },\n})`,
   },
   {
-    slug: 'confirm-and-flow', title: 'Confirm, then run a flow', group: 'Flows',
-    description: 'A compact example: confirm in a popup, run an async action, and show its result.',
-    docHref: '/docs/dialogs', runnable: true, Demo: ConfirmFlowDemo,
+    slug: "confirm-and-flow",
+    title: "Confirm, then run a flow",
+    group: "Flows",
+    description: "A compact example: confirm in a popup, run an async action, and show its result.",
+    docHref: "/docs/dialogs",
+    runnable: true,
+    Demo: ConfirmFlowDemo,
     code: `const flow = useSubmitFlow({
   publish: {
     run: publishNotes,
@@ -63,117 +80,192 @@ const exampleDefinitions: ExampleDefinition[] = [
 </SubmitFlowRoot>`,
   },
   {
-    slug: 'delete-confirmation', title: 'Destructive confirmation', group: 'Confirms',
-    description: 'Require explicit confirmation before running a destructive action.',
-    docHref: '/docs/dialogs', runnable: true, Demo: DeleteDemo,
+    slug: "delete-confirmation",
+    title: "Destructive confirmation",
+    group: "Confirms",
+    description: "Require explicit confirmation before running a destructive action.",
+    docHref: "/docs/dialogs",
+    runnable: true,
+    Demo: DeleteDemo,
     code: `const flow = useSubmitFlow({\n  remove: {\n    run: ({ id }) => deleteRecord(id),\n    confirm: {\n      title: 'Delete this record?',\n      description: 'This cannot be undone.',\n      destructive: true,\n      confirmLabel: 'Delete',\n    },\n  },\n})`,
   },
   {
-    slug: 'cancel-request', title: 'Cancel an abort-aware request', group: 'Flows',
-    description: 'Pass the signal to work that supports abort and keep the flow busy until it settles.',
-    docHref: '/docs/concepts/cancellation', runnable: true, Demo: CancelRequestDemo,
-    code: `run: async (_input, { signal }) => {\n  const response = await fetch('/api/import', { signal })\n  if (!response.ok) throw new Error('Import failed')\n  return response.json()\n}`, 
+    slug: "cancel-request",
+    title: "Cancel an abort-aware request",
+    group: "Flows",
+    description:
+      "Pass the signal to work that supports abort and keep the flow busy until it settles.",
+    docHref: "/docs/concepts/cancellation",
+    runnable: true,
+    Demo: CancelRequestDemo,
+    code: `run: async (_input, { signal }) => {\n  const response = await fetch('/api/import', { signal })\n  if (!response.ok) throw new Error('Import failed')\n  return response.json()\n}`,
   },
   {
-    slug: 'cancel-back-navigation', title: 'Cancel and back navigation', group: 'Flows',
-    description: 'Keep navigation callbacks explicit and avoid accidental form submission.',
-    docHref: '/docs/api/components', runnable: true, Demo: NavigationDemo,
+    slug: "cancel-back-navigation",
+    title: "Cancel and back navigation",
+    group: "Flows",
+    description: "Keep navigation callbacks explicit and avoid accidental form submission.",
+    docHref: "/docs/api/components",
+    runnable: true,
+    Demo: NavigationDemo,
     code: `<CancelButton onCancel={returnToList}>Cancel</CancelButton>\n<BackButton onBack={() => router.back()}>Back</BackButton>`,
   },
   {
-    slug: 'chained-steps', title: 'Sequential steps', group: 'Flows',
-    description: 'Await related steps in one runner for one lock and one final result.',
-    docHref: '/docs/concepts/chaining', runnable: true, Demo: ChainedStepsDemo,
-    code: `run: async (input, { signal, throwIfCancelled }) => {\n  const record = await createRecord(input, { signal })\n  throwIfCancelled()\n  await sendNotice(record.id, { signal })\n  return record\n}`, 
+    slug: "chained-steps",
+    title: "Sequential steps",
+    group: "Flows",
+    description: "Await related steps in one runner for one lock and one final result.",
+    docHref: "/docs/concepts/chaining",
+    runnable: true,
+    Demo: ChainedStepsDemo,
+    code: `run: async (input, { signal, throwIfCancelled }) => {\n  const record = await createRecord(input, { signal })\n  throwIfCancelled()\n  await sendNotice(record.id, { signal })\n  return record\n}`,
   },
   {
-    slug: 'independent-flows', title: 'Independent forms', group: 'Flows',
-    description: 'Use one provider while each form keeps its own busy state and result.',
-    docHref: '/docs/concepts/flow-lifecycle', runnable: true, Demo: IndependentFlowsDemo,
+    slug: "independent-flows",
+    title: "Independent forms",
+    group: "Flows",
+    description: "Use one provider while each form keeps its own busy state and result.",
+    docHref: "/docs/concepts/flow-lifecycle",
+    runnable: true,
+    Demo: IndependentFlowsDemo,
     code: `function DraftForm() {\n  const flow = useSubmitFlow({ save: { run: saveDraft } })\n  return <SubmitFlowRoot flow={flow}>…</SubmitFlowRoot>\n}\n\nfunction PreviewForm() {\n  const flow = useSubmitFlow({ preview: { run: buildPreview } })\n  return <SubmitFlowRoot flow={flow}>…</SubmitFlowRoot>\n}`,
   },
   {
-    slug: 'nested-dialog-confirmation', title: 'Confirmation from a dialog form', group: 'Confirms',
-    description: 'See the composition pattern and its focus-management caveats when a form is already inside a modal.',
-    docHref: '/docs/dialogs', runnable: false,
+    slug: "nested-dialog-confirmation",
+    title: "Confirmation from a dialog form",
+    group: "Confirms",
+    description:
+      "See the composition pattern and its focus-management caveats when a form is already inside a modal.",
+    docHref: "/docs/dialogs",
+    runnable: false,
     code: `// Place the flow under the same provider as the parent dialog.\n// Verify focus restoration and Escape behavior in your modal stack.\nconst accepted = await feedback.confirm({\n  title: 'Save these changes?',\n  outsidePress: false,\n})`,
   },
   {
-    slug: 'rhf-validation', title: 'React Hook Form validation', group: 'Flows',
-    description: 'Run the async flow only after React Hook Form accepts the values.',
-    docHref: '/docs/integrations/react-hook-form', runnable: false,
+    slug: "rhf-validation",
+    title: "React Hook Form validation",
+    group: "Flows",
+    description: "Run the async flow only after React Hook Form accepts the values.",
+    docHref: "/docs/integrations/react-hook-form",
+    runnable: false,
     code: `const submit = form.handleSubmit(async (values) => {\n  const result = await flow.run('save', values)\n  if (result.status === 'success') form.reset()\n})`,
   },
   {
-    slug: 'tanstack-mutation', title: 'TanStack Query mutation', group: 'Flows',
-    description: 'Await mutateAsync and let the application choose a single feedback owner.',
-    docHref: '/docs/integrations/tanstack-query', runnable: false,
-    code: `save: {\n  run: async (input) => {\n    const saved = await mutation.mutateAsync(input)\n    await queryClient.invalidateQueries({ queryKey: ['profile'] })\n    return saved\n  },\n  feedback: 'none', // if the mutation already notifies\n}`, 
+    slug: "tanstack-mutation",
+    title: "TanStack Query mutation",
+    group: "Flows",
+    description: "Await mutateAsync and let the application choose a single feedback owner.",
+    docHref: "/docs/integrations/tanstack-query",
+    runnable: false,
+    code: `save: {\n  run: async (input) => {\n    const saved = await mutation.mutateAsync(input)\n    await queryClient.invalidateQueries({ queryKey: ['profile'] })\n    return saved\n  },\n  feedback: 'none', // if the mutation already notifies\n}`,
   },
   {
-    slug: 'server-function', title: 'Next.js Server Function', group: 'Flows',
-    description: 'Call a server function from a client flow and map domain failures to safe messages.',
-    docHref: '/docs/integrations/next-server-functions', runnable: false,
-    code: `save: {\n  run: async (input) => {\n    const result = await saveProfile(input)\n    if (!result.ok) throw new Error(result.code)\n    return result.profile\n  },\n  error: mapSafeMessage,\n}`, 
+    slug: "server-function",
+    title: "Next.js Server Function",
+    group: "Flows",
+    description:
+      "Call a server function from a client flow and map domain failures to safe messages.",
+    docHref: "/docs/integrations/next-server-functions",
+    runnable: false,
+    code: `save: {\n  run: async (input) => {\n    const result = await saveProfile(input)\n    if (!result.ok) throw new Error(result.code)\n    return result.profile\n  },\n  error: mapSafeMessage,\n}`,
   },
   {
-    slug: 'headless-ui', title: 'Headless custom controls', group: 'Flows',
-    description: 'Render state yourself and import the hook from the headless entry.',
-    docHref: '/docs/api/headless-and-adapters', runnable: true, Demo: HeadlessDemo,
+    slug: "headless-ui",
+    title: "Headless custom controls",
+    group: "Flows",
+    description: "Render state yourself and import the hook from the headless entry.",
+    docHref: "/docs/api/headless-and-adapters",
+    runnable: true,
+    Demo: HeadlessDemo,
     code: `import { useSubmitFlow } from 'react-submit-flow/headless'\n\n<button disabled={flow.isBusy} onClick={() => void flow.run('save', input)}>\n  {flow.isBusy ? 'Saving…' : 'Save'}\n</button>`,
   },
   {
-    slug: 'standalone-dialogs', title: 'Standalone confirm and alert', group: 'Confirms',
-    description: 'Ask for confirmation or acknowledgement outside a form.',
-    docHref: '/docs/api/provider-and-feedback', runnable: true, Demo: DialogDemo,
+    slug: "standalone-dialogs",
+    title: "Standalone confirm and alert",
+    group: "Confirms",
+    description: "Ask for confirmation or acknowledgement outside a form.",
+    docHref: "/docs/api/provider-and-feedback",
+    runnable: true,
+    Demo: DialogDemo,
     code: `const confirmed = await feedback.confirm({\n  title: 'Remove this draft?',\n  destructive: true,\n})\nif (confirmed) await removeDraft()\n\nconst result = await feedback.alert({ title: 'Export ready' })`,
   },
   {
-    slug: 'unsaved-changes-dialog', title: 'Three actions: save, discard, or cancel', group: 'Flows',
-    description: 'Handle unsaved edits in a dialog with two async actions and an explicit cancel choice.',
-    docHref: '/docs/dialogs', runnable: true, Demo: UnsavedChangesDialogDemo,
+    slug: "unsaved-changes-dialog",
+    title: "Three actions: save, discard, or cancel",
+    group: "Flows",
+    description:
+      "Handle unsaved edits in a dialog with two async actions and an explicit cancel choice.",
+    docHref: "/docs/dialogs",
+    runnable: true,
+    Demo: UnsavedChangesDialogDemo,
     code: `<SubmitFlowRoot flow={flow}>\n  <CancelButton onCancel={closeDialog}>Cancel</CancelButton>\n  <ActionButton action="discard">Discard changes</ActionButton>\n  <ActionButton action="save">Save changes</ActionButton>\n  <SubmitFeedback />\n</SubmitFlowRoot>\n// Render inside your dialog. Both actions share the flow's busy lock.`,
   },
   {
-    slug: 'publish-dialog', title: 'Three actions: draft, publish, or cancel', group: 'Flows',
-    description: 'Review a release, save a private draft, or publish it. Simulate an error and retry inside the dialog.',
-    docHref: '/docs/dialogs', runnable: true, Demo: PublishDialogDemo,
+    slug: "publish-dialog",
+    title: "Three actions: draft, publish, or cancel",
+    group: "Flows",
+    description:
+      "Review a release, save a private draft, or publish it. Simulate an error and retry inside the dialog.",
+    docHref: "/docs/dialogs",
+    runnable: true,
+    Demo: PublishDialogDemo,
     code: `const flow = useSubmitFlow({\n  save: {\n    run: saveDraft,\n    pendingLabel: 'Saving draft…',\n    feedback: 'inline',\n    onSuccess: closeDialog,\n  },\n  publish: {\n    run: publishRelease,\n    pendingLabel: 'Publishing…',\n    feedback: 'inline',\n    error: 'Publishing failed. Try again or save a draft.',\n    onSuccess: closeDialog,\n  },\n})\n\n// Dialog footer: CancelButton + save ActionButton + publish ActionButton.`,
   },
   {
-    slug: 'dialog-options', title: 'Dialog variants and sizes', group: 'Confirms',
-    description: 'Try the supported variants and responsive sizes in the built-in dialog.',
-    docHref: '/docs/dialogs', runnable: true, Demo: DialogOptionsDemo,
+    slug: "dialog-options",
+    title: "Dialog variants and sizes",
+    group: "Confirms",
+    description: "Try the supported variants and responsive sizes in the built-in dialog.",
+    docHref: "/docs/dialogs",
+    runnable: true,
+    Demo: DialogOptionsDemo,
     code: `await feedback.confirm({\n  title: 'Continue?',\n  variant: 'warning',\n  size: 'md',\n  closeOnEscape: true,\n  outsidePress: false,\n})`,
   },
   {
-    slug: 'dialog-dismissal', title: 'Escape and outside dismissal', group: 'Confirms',
-    description: 'Configure Escape and backdrop dismissal independently and observe the boolean result.',
-    docHref: '/docs/dialogs', runnable: true, Demo: DialogDismissalDemo,
+    slug: "dialog-dismissal",
+    title: "Escape and outside dismissal",
+    group: "Confirms",
+    description:
+      "Configure Escape and backdrop dismissal independently and observe the boolean result.",
+    docHref: "/docs/dialogs",
+    runnable: true,
+    Demo: DialogDismissalDemo,
     code: `const result = await feedback.confirm({\n  title: 'Review these changes?',\n  closeOnEscape: false,\n  outsidePress: true,\n})\n// Escape stays open; clicking outside resolves false.`,
   },
   {
-    slug: 'rich-dialog-content', title: 'Rich dialog preview', group: 'Confirms',
-    description: 'Add structured React content with plain-text accessible title and description.',
-    docHref: '/docs/dialogs', runnable: true, Demo: RichDialogDemo,
+    slug: "rich-dialog-content",
+    title: "Rich dialog preview",
+    group: "Confirms",
+    description: "Add structured React content with plain-text accessible title and description.",
+    docHref: "/docs/dialogs",
+    runnable: true,
+    Demo: RichDialogDemo,
     code: `await feedback.confirm({\n  title: 'Publish release notes?',\n  description: 'Review the summary before publishing.',\n  size: 'lg',\n  content: <ReleasePreview />,\n})`,
   },
   {
-    slug: 'retained-confirmation', title: 'Retained confirmation and error', group: 'Confirms',
-    description: 'Keep the dialog open during execution and show an error without retrying.',
-    docHref: '/docs/dialogs', runnable: true, Demo: RetainedErrorDemo,
-    code: `publish: {\n  run: publishDraft,\n  confirm: { title: 'Publish now?' },\n  closeOnConfirm: false,\n  pendingLabel: 'Publishing…',\n}`, 
+    slug: "retained-confirmation",
+    title: "Retained confirmation and error",
+    group: "Confirms",
+    description: "Keep the dialog open during execution and show an error without retrying.",
+    docHref: "/docs/dialogs",
+    runnable: true,
+    Demo: RetainedErrorDemo,
+    code: `publish: {\n  run: publishDraft,\n  confirm: { title: 'Publish now?' },\n  closeOnConfirm: false,\n  pendingLabel: 'Publishing…',\n}`,
   },
   {
-    slug: 'theme-rtl', title: 'Theme tokens and RTL', group: 'Confirms',
-    description: 'Use an optional theme and render provider-owned dialogs and notifications in right-to-left layouts.',
-    docHref: '/docs/styling', runnable: true, Demo: ThemeRtlDemo,
+    slug: "theme-rtl",
+    title: "Theme tokens and RTL",
+    group: "Confirms",
+    description:
+      "Use an optional theme and render provider-owned dialogs and notifications in right-to-left layouts.",
+    docHref: "/docs/styling",
+    runnable: true,
+    Demo: ThemeRtlDemo,
     code: `import 'react-submit-flow/styles.css'\nimport 'react-submit-flow/themes/forest.css'\n\n<SubmitFlowProvider dir="rtl">\n  <ArabicPage />\n</SubmitFlowProvider>`,
   },
 ];
 
 const fullCodeBySlug: Record<string, string> = {
-  'confirm-and-flow': `'use client';
+  "confirm-and-flow": `'use client';
 
 import { ActionButton, SubmitFeedback, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow';
 
@@ -201,7 +293,7 @@ export function PublishNotes() {
     </SubmitFlowRoot>
   );
 }`,
-  'unsaved-changes-dialog': `'use client';
+  "unsaved-changes-dialog": `'use client';
 
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { ActionButton, CancelButton, SubmitFeedback, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow';
@@ -296,7 +388,7 @@ export function UnsavedChangesDialogDemo() {
     </ThreeActionDialog>
   </section>;
 }`,
-  'publish-dialog': `'use client';
+  "publish-dialog": `'use client';
 
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { ActionButton, CancelButton, SubmitFeedback, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow';
@@ -396,7 +488,7 @@ export function PublishDialogDemo() {
     </ThreeActionDialog>
   </section>;
 }`,
-  'basic-form': `import { SubmitButton, SubmitFlowForm, useSubmitFlow } from 'react-submit-flow'
+  "basic-form": `import { SubmitButton, SubmitFlowForm, useSubmitFlow } from 'react-submit-flow'
 
 type Profile = { name: string }
 
@@ -429,7 +521,7 @@ export function ProfileForm() {
     </SubmitFlowForm>
   )
 }`,
-  'multi-action': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+  "multi-action": `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 type Draft = { id: string; title: string }
 
@@ -453,7 +545,7 @@ export function DraftActions({ draft }: { draft: Draft }) {
     <ActionButton action="publish" input={draft}>Publish</ActionButton>
   </SubmitFlowRoot>
 }`,
-  'delete-confirmation': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+  "delete-confirmation": `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 export function DeleteDraft({ id, title }: { id: string; title: string }) {
   const flow = useSubmitFlow({
@@ -478,7 +570,7 @@ export function DeleteDraft({ id, title }: { id: string; title: string }) {
     <ActionButton action="remove" input={{ id }}>Delete draft</ActionButton>
   </SubmitFlowRoot>
 }`,
-  'cancel-request': `import { ActionButton, CancelButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+  "cancel-request": `import { ActionButton, CancelButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 export function ImportButton() {
   const flow = useSubmitFlow({
@@ -499,7 +591,7 @@ export function ImportButton() {
     <p role="status">{flow.status}</p>
   </SubmitFlowRoot>
 }`,
-  'cancel-back-navigation': `import { useState } from 'react'
+  "cancel-back-navigation": `import { useState } from 'react'
 import { ActionButton, BackButton, CancelButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 export function EditActions({ onBack }: { onBack: () => void }) {
@@ -513,7 +605,7 @@ export function EditActions({ onBack }: { onBack: () => void }) {
     <p role="status">{message}</p>
   </SubmitFlowRoot>
 }`,
-  'chained-steps': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+  "chained-steps": `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 export function CreateAndNotify() {
   const flow = useSubmitFlow({
@@ -535,7 +627,7 @@ export function CreateAndNotify() {
     </ActionButton>
   </SubmitFlowRoot>
 }`,
-  'independent-flows': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+  "independent-flows": `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 function DraftForm() {
   const flow = useSubmitFlow({ save: { run: async () => saveDraft() } })
@@ -556,7 +648,7 @@ function PreviewForm() {
 export function WorkspaceActions() {
   return <><DraftForm /><PreviewForm /></>
 }`,
-  'nested-dialog-confirmation': `import { useSubmitFeedback } from 'react-submit-flow'
+  "nested-dialog-confirmation": `import { useSubmitFeedback } from 'react-submit-flow'
 
 export function DialogForm() {
   const feedback = useSubmitFeedback()
@@ -578,7 +670,7 @@ export function DialogForm() {
 
 // Mount DialogForm under SubmitFlowProvider and your modal provider.
 // Verify focus restoration and keyboard behavior for your modal stack.`,
-  'rhf-validation': `import { useForm } from 'react-hook-form'
+  "rhf-validation": `import { useForm } from 'react-hook-form'
 import { SubmitFeedback, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 type Values = { email: string }
@@ -601,7 +693,7 @@ export function InviteForm() {
     </form>
   </SubmitFlowRoot>
 }`,
-  'tanstack-mutation': `import { useMutation, useQueryClient } from '@tanstack/react-query'
+  "tanstack-mutation": `import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 export function ProfileSave({ profile }: { profile: Profile }) {
@@ -623,7 +715,7 @@ export function ProfileSave({ profile }: { profile: Profile }) {
     <ActionButton action="save" input={profile}>Save profile</ActionButton>
   </SubmitFlowRoot>
 }`,
-  'server-function': `// actions.ts
+  "server-function": `// actions.ts
 'use server'
 export async function saveProfile(input: ProfileInput) {
   await requireCurrentUser()
@@ -652,7 +744,7 @@ export function ProfileForm() {
     {flow.isBusy ? 'Saving…' : 'Save'}
   </button>
 }`,
-  'headless-ui': `import { useSubmitFlow } from 'react-submit-flow/headless'
+  "headless-ui": `import { useSubmitFlow } from 'react-submit-flow/headless'
 
 export function CustomSave({ input }: { input: { title: string } }) {
   const flow = useSubmitFlow({
@@ -669,7 +761,7 @@ export function CustomSave({ input }: { input: { title: string } }) {
     <p role={flow.status === 'error' ? 'alert' : 'status'}>{flow.status}</p>
   </>
 }`,
-  'standalone-dialogs': `import { useSubmitFeedback } from 'react-submit-flow'
+  "standalone-dialogs": `import { useSubmitFeedback } from 'react-submit-flow'
 
 export function ExportButton() {
   const feedback = useSubmitFeedback()
@@ -692,7 +784,7 @@ export function ExportButton() {
 
   return <button type="button" onClick={() => void exportData()}>Export</button>
 }`,
-  'dialog-options': `import { useSubmitFeedback } from 'react-submit-flow'
+  "dialog-options": `import { useSubmitFeedback } from 'react-submit-flow'
 
 export function ContinueButton() {
   const feedback = useSubmitFeedback()
@@ -715,7 +807,7 @@ export function ContinueButton() {
 
   return <button type="button" onClick={() => void continueFlow()}>Continue</button>
 }`,
-  'dialog-dismissal': `import { useState } from 'react'
+  "dialog-dismissal": `import { useState } from 'react'
 import { useSubmitFeedback } from 'react-submit-flow'
 
 export function DismissalControls() {
@@ -741,7 +833,7 @@ export function DismissalControls() {
     <p role="status">{result}</p>
   </>
 }`,
-  'rich-dialog-content': `import { useSubmitFeedback } from 'react-submit-flow'
+  "rich-dialog-content": `import { useSubmitFeedback } from 'react-submit-flow'
 
 export function ReleasePreviewButton() {
   const feedback = useSubmitFeedback()
@@ -760,7 +852,7 @@ export function ReleasePreviewButton() {
 
   return <button onClick={() => void reviewRelease()}>Preview release notes</button>
 }`,
-  'retained-confirmation': `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
+  "retained-confirmation": `import { ActionButton, SubmitFlowRoot, useSubmitFlow } from 'react-submit-flow'
 
 export function PublishButton() {
   const flow = useSubmitFlow({
@@ -781,7 +873,7 @@ export function PublishButton() {
     <ActionButton action="publish" input={{ id: 'draft-1' }}>Publish</ActionButton>
   </SubmitFlowRoot>
 }`,
-  'theme-rtl': `// app/layout.tsx
+  "theme-rtl": `// app/layout.tsx
 import 'react-submit-flow/styles.css'
 import 'react-submit-flow/themes/forest.css'
 
@@ -803,7 +895,9 @@ export const examples: Example[] = exampleDefinitions.map((example) => ({
   fullCode: fullCodeBySlug[example.slug] ?? example.code,
 }));
 
-export const exampleGroups = [...new Set(examples.map((example) => example.group))].map((title) => ({
-  title,
-  items: examples.filter((example) => example.group === title),
-}));
+export const exampleGroups = [...new Set(examples.map((example) => example.group))].map(
+  (title) => ({
+    title,
+    items: examples.filter((example) => example.group === title),
+  }),
+);

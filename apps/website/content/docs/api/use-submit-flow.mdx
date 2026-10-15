@@ -6,14 +6,14 @@
 const flow = useSubmitFlow({
   save: {
     run: async (input: { title: string }, { signal }) => saveDraft(input, signal),
-    pendingLabel: 'Saving…',
+    pendingLabel: "Saving…",
     success: (saved, input) => `Saved “${input.title}” as ${saved.id}.`,
-    error: 'Could not save this draft.',
-    feedback: 'toast', // 'toast' | 'inline' | 'none'
+    error: "Could not save this draft.",
+    feedback: "toast", // 'toast' | 'inline' | 'none'
   },
-})
+});
 
-const result = await flow.run('save', { title: 'Plan' })
+const result = await flow.run("save", { title: "Plan" });
 ```
 
 Each `run(input, context)` may return a value or promise. The context contains `signal`, `runId`, `action`, and `throwIfCancelled()`. `confirm` can be an options object or a function of the input. `closeOnConfirm: false` keeps the built-in confirmation visible while the action executes.

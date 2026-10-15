@@ -5,7 +5,7 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint app components mdx-components.tsx",
+    "lint": "vp lint app components mdx-components.tsx",
     "test:e2e": "echo 'Browser checks are not configured yet.'"
   },
   "dependencies": {
@@ -22,7 +22,6 @@
     "@types/node": "^24.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.35.0",
     "typescript": "^5.9.3"
   }
 }

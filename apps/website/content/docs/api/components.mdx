@@ -8,7 +8,9 @@ Provides a flow to descendant buttons and `SubmitFeedback` without adding a wrap
 
 ```tsx
 <SubmitFlowRoot flow={flow}>
-  <ActionButton action="archive" input={{ id }}>Archive</ActionButton>
+  <ActionButton action="archive" input={{ id }}>
+    Archive
+  </ActionButton>
   <SubmitFeedback />
 </SubmitFlowRoot>
 ```
@@ -18,8 +20,11 @@ Provides a flow to descendant buttons and `SubmitFeedback` without adding a wrap
 Renders one native `<form>`. Set `defaultAction` for Enter-key submissions and optionally map each action's `FormData` to its typed input with `getInput`.
 
 ```tsx
-<SubmitFlowForm flow={flow} defaultAction="save"
-  getInput={{ save: (data) => ({ title: String(data.get('title') ?? '') }) }}>
+<SubmitFlowForm
+  flow={flow}
+  defaultAction="save"
+  getInput={{ save: (data) => ({ title: String(data.get("title") ?? "") }) }}
+>
   <input name="title" required />
   <SubmitButton action="save">Save</SubmitButton>
 </SubmitFlowForm>

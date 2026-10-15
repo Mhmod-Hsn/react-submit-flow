@@ -3,18 +3,18 @@
 Await `mutateAsync()` in the runner. Keep cache invalidation and query state in TanStack Query, and choose one owner for user-facing notifications to avoid duplicate toasts.
 
 ```tsx
-const mutation = useMutation({ mutationFn: updateProfile })
-const queryClient = useQueryClient()
+const mutation = useMutation({ mutationFn: updateProfile });
+const queryClient = useQueryClient();
 const flow = useSubmitFlow({
   save: {
     run: async (input: ProfileInput) => {
-      const result = await mutation.mutateAsync(input)
-      await queryClient.invalidateQueries({ queryKey: ['profile'] })
-      return result
+      const result = await mutation.mutateAsync(input);
+      await queryClient.invalidateQueries({ queryKey: ["profile"] });
+      return result;
     },
-    success: 'Profile updated.',
+    success: "Profile updated.",
   },
-})
+});
 ```
 
 If the mutation already reports success and errors through callbacks, suppress those notifications or set the flow action to `feedback: 'none'`. Keep retry policy in the query layer and avoid automatically retrying non-idempotent writes. TanStack Query is not bundled or installed in the docs app; this is an integration recipe.

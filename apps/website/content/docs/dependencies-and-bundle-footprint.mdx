@@ -2,13 +2,13 @@
 
 `react-submit-flow` has **zero additional runtime dependencies**. React is the required peer dependency; React DOM is declared as an optional peer. The package does not pull in a dialog framework, toast system, form library, or styling runtime.
 
-| Package entry | What it includes | Use it when |
-| --- | --- | --- |
-| `react-submit-flow` | Typed action hook, provider, form/buttons, built-in dialogs, notifications | You want the ready-to-use UI and shared feedback host |
-| `react-submit-flow/headless` | The action hook and its execution types | You render all controls and feedback yourself |
-| `react-submit-flow/styles.css` | Optional default theme styles | You want the library's default colors and transitions |
-| `react-submit-flow/themes/forest.css` | Optional forest tokens | You want the forest preset |
-| `react-submit-flow/themes/high-contrast.css` | Optional high-contrast tokens | You want the high-contrast preset |
+| Package entry                                | What it includes                                                           | Use it when                                           |
+| -------------------------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `react-submit-flow`                          | Typed action hook, provider, form/buttons, built-in dialogs, notifications | You want the ready-to-use UI and shared feedback host |
+| `react-submit-flow/headless`                 | The action hook and its execution types                                    | You render all controls and feedback yourself         |
+| `react-submit-flow/styles.css`               | Optional default theme styles                                              | You want the library's default colors and transitions |
+| `react-submit-flow/themes/forest.css`        | Optional forest tokens                                                     | You want the forest preset                            |
+| `react-submit-flow/themes/high-contrast.css` | Optional high-contrast tokens                                              | You want the high-contrast preset                     |
 
 The default dialog uses the browser's native `<dialog>` element, and the notification host is part of this package. Theme CSS is never imported automatically. The small inline layout styles keep the built-in UI usable when you omit the stylesheet.
 
@@ -33,13 +33,13 @@ pnpm add react react-dom react-submit-flow
 Use the root entry for the provider UI:
 
 ```tsx
-import { SubmitFlowProvider, useSubmitFlow } from 'react-submit-flow'
+import { SubmitFlowProvider, useSubmitFlow } from "react-submit-flow";
 ```
 
 Use the headless entry when you do not need the built-in host:
 
 ```tsx
-import { useSubmitFlow } from 'react-submit-flow/headless'
+import { useSubmitFlow } from "react-submit-flow/headless";
 ```
 
 The headless entry avoids loading the provider and dialog UI. It still requires React because it is a React hook. If an action asks for confirmation, supply an adapter or use the root entry under a provider.

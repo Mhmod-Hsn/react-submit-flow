@@ -30,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 22.18.0
           cache: pnpm
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -39,7 +39,7 @@ jobs:
       - name: Build static site
         run: pnpm build
         env:
-          GITHUB_PAGES: 'true'
+          GITHUB_PAGES: "true"
           GITHUB_REPOSITORY: ${{ github.repository }}
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4

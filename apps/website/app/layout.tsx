@@ -1,14 +1,14 @@
-import type { Metadata } from 'next';
-import 'react-submit-flow/styles.css';
-import 'react-submit-flow/themes/forest.css';
-import 'react-submit-flow/themes/high-contrast.css';
-import './site.css';
-import { Providers } from './providers';
-import { SiteHeader } from '../components/site-header';
+import type { Metadata } from "next";
+import "react-submit-flow/styles.css";
+import "react-submit-flow/themes/forest.css";
+import "react-submit-flow/themes/high-contrast.css";
+import "./site.css";
+import { Providers } from "./providers";
+import { SiteHeader } from "../components/site-header";
 
 export const metadata: Metadata = {
-  title: { default: 'react-submit-flow', template: '%s · react-submit-flow' },
-  description: 'Typed async action flows with accessible, customizable React feedback.',
+  title: { default: "react-submit-flow", template: "%s · react-submit-flow" },
+  description: "Typed async action flows with accessible, customizable React feedback.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

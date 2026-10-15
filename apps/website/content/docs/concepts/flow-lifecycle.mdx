@@ -16,13 +16,13 @@ confirming → cancelled (declined or dismissed)
 const flow = useSubmitFlow({
   save: {
     run: async (input: { title: string }) => saveRecord(input),
-    pendingLabel: 'Saving…',
+    pendingLabel: "Saving…",
   },
-})
+});
 
-const result = await flow.run('save', { title: 'Draft' })
-if (result.status === 'success') {
-  console.log(result.data)
+const result = await flow.run("save", { title: "Draft" });
+if (result.status === "success") {
+  console.log(result.data);
 }
 ```
 

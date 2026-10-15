@@ -13,18 +13,18 @@ If React and React DOM are already installed in your application, install only `
 For Next.js App Router, place `SubmitFlowProvider` in a small client component and render it from the root layout. Static layout content and documentation can remain server rendered.
 
 ```tsx
-'use client'
-import { SubmitFlowProvider } from 'react-submit-flow'
+"use client";
+import { SubmitFlowProvider } from "react-submit-flow";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <SubmitFlowProvider>{children}</SubmitFlowProvider>
+  return <SubmitFlowProvider>{children}</SubmitFlowProvider>;
 }
 ```
 
 You may import the optional theme once from your root layout:
 
 ```tsx
-import 'react-submit-flow/styles.css'
+import "react-submit-flow/styles.css";
 ```
 
 The default UI remains usable when this stylesheet is omitted.
@@ -32,23 +32,30 @@ The default UI remains usable when this stylesheet is omitted.
 ## Build a flow
 
 ```tsx
-'use client'
-import { SubmitButton, SubmitFlowForm, useSubmitFlow } from 'react-submit-flow'
+"use client";
+import { SubmitButton, SubmitFlowForm, useSubmitFlow } from "react-submit-flow";
 
 export function ProfileForm() {
   const flow = useSubmitFlow({
     save: {
       run: async (input: { name: string }) => saveProfile(input),
-      pendingLabel: 'Saving…',
-      success: 'Profile saved.',
+      pendingLabel: "Saving…",
+      success: "Profile saved.",
     },
-  })
+  });
 
-  return <SubmitFlowForm flow={flow} defaultAction="save"
-    getInput={{ save: data => ({ name: String(data.get('name') ?? '') }) }}>
-    <label>Name <input name="name" required /></label>
-    <SubmitButton action="save">Save</SubmitButton>
-  </SubmitFlowForm>
+  return (
+    <SubmitFlowForm
+      flow={flow}
+      defaultAction="save"
+      getInput={{ save: (data) => ({ name: String(data.get("name") ?? "") }) }}
+    >
+      <label>
+        Name <input name="name" required />
+      </label>
+      <SubmitButton action="save">Save</SubmitButton>
+    </SubmitFlowForm>
+  );
 }
 ```
 

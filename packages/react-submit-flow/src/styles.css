@@ -5,7 +5,7 @@
   --sf-dialog-md: 32rem;
   --sf-dialog-lg: 44rem;
   --sf-radius: 1rem;
-  --sf-shadow: 0 24px 72px rgb(0 0 0 / .26);
+  --sf-shadow: 0 24px 72px rgb(0 0 0 / 0.26);
   --sf-accent: #2459c4;
   --sf-primary-background: var(--sf-accent);
   --sf-primary-foreground: Canvas;
@@ -16,23 +16,90 @@
   --sf-info: #175cd3;
 }
 
-[data-sf-toast-host] { font-family: inherit; }
-.sf-toast { font-size: .925rem; }
-.sf-dialog { font-family: inherit; font-size: 1rem; }
-.sf-dialog { border: 1px solid color-mix(in srgb, CanvasText 14%, transparent); border-radius: var(--sf-radius, 1rem); background: Canvas; color: CanvasText; box-shadow: var(--sf-shadow); }
-.sf-dialog-description { color: color-mix(in srgb, CanvasText 74%, transparent); }
-.sf-toast { border: 1px solid color-mix(in srgb, CanvasText 18%, transparent); border-radius: var(--sf-radius, .75rem); background: Canvas; color: CanvasText; box-shadow: 0 12px 36px rgb(0 0 0 / .16); }
-.sf-button { border: 1px solid color-mix(in srgb, CanvasText 22%, transparent); border-radius: .65rem; background: transparent; color: inherit; }
-.sf-dialog .sf-button-primary { border-color: var(--sf-primary-border-color, var(--sf-accent)); background: var(--sf-primary-background, var(--sf-accent)); color: var(--sf-primary-foreground, Canvas); }
-.sf-dialog[data-size="sm"] { --sf-dialog-max: var(--sf-dialog-sm); }
-.sf-dialog[data-size="md"] { --sf-dialog-max: var(--sf-dialog-md); }
-.sf-dialog[data-size="lg"] { --sf-dialog-max: var(--sf-dialog-lg); }
-.sf-dialog[data-variant="danger"] { --sf-primary-background: var(--sf-danger); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-danger); }
-.sf-dialog[data-variant="warning"] { --sf-primary-background: var(--sf-warning); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-warning); }
-.sf-dialog[data-variant="success"] { --sf-primary-background: var(--sf-success); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-success); }
-.sf-dialog[data-variant="info"] { --sf-primary-background: var(--sf-info); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-info); }
-.sf-button:focus-visible, .sf-toast button:focus-visible { outline: 3px solid var(--sf-accent); outline-offset: 2px; }
+[data-sf-toast-host] {
+  font-family: inherit;
+}
+.sf-toast {
+  font-size: 0.925rem;
+}
+.sf-dialog {
+  font-family: inherit;
+  font-size: 1rem;
+}
+.sf-dialog {
+  border: 1px solid color-mix(in srgb, CanvasText 14%, transparent);
+  border-radius: var(--sf-radius, 1rem);
+  background: Canvas;
+  color: CanvasText;
+  box-shadow: var(--sf-shadow);
+}
+.sf-dialog-description {
+  color: color-mix(in srgb, CanvasText 74%, transparent);
+}
+.sf-toast {
+  border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+  border-radius: var(--sf-radius, 0.75rem);
+  background: Canvas;
+  color: CanvasText;
+  box-shadow: 0 12px 36px rgb(0 0 0 / 0.16);
+}
+.sf-button {
+  border: 1px solid color-mix(in srgb, CanvasText 22%, transparent);
+  border-radius: 0.65rem;
+  background: transparent;
+  color: inherit;
+}
+.sf-dialog .sf-button-primary {
+  border-color: var(--sf-primary-border-color, var(--sf-accent));
+  background: var(--sf-primary-background, var(--sf-accent));
+  color: var(--sf-primary-foreground, Canvas);
+}
+.sf-dialog[data-size="sm"] {
+  --sf-dialog-max: var(--sf-dialog-sm);
+}
+.sf-dialog[data-size="md"] {
+  --sf-dialog-max: var(--sf-dialog-md);
+}
+.sf-dialog[data-size="lg"] {
+  --sf-dialog-max: var(--sf-dialog-lg);
+}
+.sf-dialog[data-variant="danger"] {
+  --sf-primary-background: var(--sf-danger);
+  --sf-primary-foreground: white;
+  --sf-primary-border-color: var(--sf-danger);
+}
+.sf-dialog[data-variant="warning"] {
+  --sf-primary-background: var(--sf-warning);
+  --sf-primary-foreground: white;
+  --sf-primary-border-color: var(--sf-warning);
+}
+.sf-dialog[data-variant="success"] {
+  --sf-primary-background: var(--sf-success);
+  --sf-primary-foreground: white;
+  --sf-primary-border-color: var(--sf-success);
+}
+.sf-dialog[data-variant="info"] {
+  --sf-primary-background: var(--sf-info);
+  --sf-primary-foreground: white;
+  --sf-primary-border-color: var(--sf-info);
+}
+.sf-button:focus-visible,
+.sf-toast button:focus-visible {
+  outline: 3px solid var(--sf-accent);
+  outline-offset: 2px;
+}
 @media (prefers-reduced-motion: no-preference) {
-  .sf-toast { animation: sf-enter 160ms ease-out; }
-  @keyframes sf-enter { from { opacity: 0; transform: translateY(-.35rem); } to { opacity: 1; transform: translateY(0); } }
+  .sf-toast {
+    animation: sf-enter 160ms ease-out;
+  }
+  @keyframes sf-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-0.35rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

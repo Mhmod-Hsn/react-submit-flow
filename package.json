@@ -1,24 +1,25 @@
 {
   "name": "react-submit-flow-workspace",
   "private": true,
-  "packageManager": "pnpm@10.26.2",
-  "engines": { "node": ">=20.19.0" },
   "scripts": {
-    "dev": "pnpm --filter react-submit-flow build && concurrently -k \"pnpm --filter react-submit-flow dev\" \"wait-on packages/react-submit-flow/dist/index.js && pnpm --filter @react-submit-flow/website dev\"",
-    "build": "pnpm --filter react-submit-flow build && pnpm --filter @react-submit-flow/website build",
-    "build:package": "pnpm --filter react-submit-flow build",
-    "build:website": "pnpm --filter @react-submit-flow/website build",
-    "typecheck": "pnpm --filter react-submit-flow build:types && pnpm --filter react-submit-flow typecheck && pnpm --filter @react-submit-flow/website typecheck",
-    "lint": "pnpm --filter react-submit-flow lint && pnpm --filter @react-submit-flow/website lint",
-    "check": "pnpm typecheck && pnpm lint && pnpm build",
-    "test": "pnpm --filter react-submit-flow test",
-    "test:e2e": "pnpm --filter @react-submit-flow/website test:e2e",
-    "check:package": "pnpm --filter react-submit-flow check:package"
+    "dev": "vp run build:package && concurrently -k \"vp -C packages/react-submit-flow run dev\" \"wait-on packages/react-submit-flow/dist/index.js && vp -C apps/website run dev\"",
+    "build": "vp run build:package && vp run build:website",
+    "build:package": "vp -C packages/react-submit-flow run build",
+    "build:website": "vp -C apps/website run build",
+    "typecheck": "vp -C packages/react-submit-flow run build:types && vp -C packages/react-submit-flow run typecheck && vp -C apps/website run typecheck",
+    "lint": "vp -C packages/react-submit-flow run lint && vp -C apps/website run lint",
+    "check": "vp run typecheck && vp run lint && vp run build",
+    "test": "vp -C packages/react-submit-flow run test",
+    "test:e2e": "vp -C apps/website run test:e2e",
+    "check:package": "vp -C packages/react-submit-flow run check:package"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
-    "prettier": "^3.6.2",
-    "typescript-eslint": "^8.39.0",
+    "vite-plus": "catalog:",
     "wait-on": "^8.0.4"
-  }
+  },
+  "engines": {
+    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+  },
+  "packageManager": "pnpm@10.26.2"
 }

@@ -12,30 +12,30 @@ The repository is a pnpm workspace containing the library package and its Next.j
 
 ## Requirements
 
-- Node.js 20.19 or newer
+- Node.js `^22.18.0`, `^24.11.0`, or `>=26.0.0` for the Vite+ toolchain
 - pnpm 10.26.2 (managed through Corepack or your package manager)
 
 ## Get started
 
 ```sh
-pnpm install
-pnpm dev
+vp install
+vp run dev
 ```
 
-The development command builds the package, then starts the Vite package watcher and Next.js website. Open the local URL printed by Next.js to browse the docs and live examples.
+The development script builds the package, then starts the Vite package watcher and Next.js website. Open the local URL printed by Next.js to browse the docs and live examples. `vp dev` starts Vite's built-in server, so use `vp run dev` to run this repository's Next.js development script. You can also use `pnpm install` and `pnpm dev`.
 
 ## Workspace commands
 
-| Command | Purpose |
-| --- | --- |
-| `pnpm dev` | Build the package, watch library changes, and run the website. |
-| `pnpm build` | Build the library and the production website. |
-| `pnpm build:package` | Build the Vite package and declarations. |
-| `pnpm build:website` | Build the Next.js website. |
-| `pnpm typecheck` | Emit package declarations, then typecheck the library and website. |
-| `pnpm lint` | Lint library and website source. |
-| `pnpm check` | Run typecheck, lint, and production builds. |
-| `pnpm check:package` | Inspect the files included in the npm package. |
+| Command                | Purpose                                                            |
+| ---------------------- | ------------------------------------------------------------------ |
+| `vp run dev`           | Build the package, watch library changes, and run the website.     |
+| `vp run build`         | Build the library and the production website.                      |
+| `vp run build:package` | Build the Vite package and declarations.                           |
+| `vp run build:website` | Build the Next.js website.                                         |
+| `vp run typecheck`     | Emit package declarations, then typecheck the library and website. |
+| `vp run lint`          | Lint library and website source with Vite+.                        |
+| `vp run check`         | Run typecheck, lint, and production builds through Vite+.          |
+| `vp run check:package` | Inspect the files included in the npm package.                     |
 
 The website consumes the workspace package through its public exports. Build the package before running the website by itself:
 

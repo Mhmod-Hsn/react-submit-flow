@@ -5,7 +5,7 @@
   --sf-warning: #603800;
   --sf-success: #005c24;
   --sf-info: #003eaa;
-  --sf-radius: .25rem;
+  --sf-radius: 0.25rem;
   --sf-dialog-background: Canvas;
   --sf-dialog-foreground: CanvasText;
   --sf-dialog-border-color: CanvasText;
@@ -18,24 +18,68 @@
   --sf-toast-shadow: 0 0 0 2px Canvas;
   --sf-button-border-color: CanvasText;
   --sf-button-border-width: 2px;
-  --sf-button-radius: .25rem;
+  --sf-button-radius: 0.25rem;
   --sf-primary-background: CanvasText;
   --sf-primary-foreground: Canvas;
   --sf-primary-border-color: CanvasText;
 }
 
-:root[data-theme="high-contrast"] .sf-dialog, :root[data-theme="high-contrast"] .sf-toast { border: 2px solid CanvasText; background: Canvas; color: CanvasText; box-shadow: 0 0 0 2px Canvas; }
-:root[data-theme="high-contrast"] .sf-dialog .sf-dialog-description { color: CanvasText; }
-:root[data-theme="high-contrast"] .sf-dialog .sf-button { border: 2px solid CanvasText; }
-:root[data-theme="high-contrast"] .sf-dialog .sf-button-primary { border: 2px solid CanvasText; outline: 1px solid Canvas; outline-offset: -4px; background: CanvasText; color: Canvas; }
-:root[data-theme="high-contrast"] .sf-dialog[data-variant="danger"] .sf-button-primary { background: var(--sf-danger); border-color: var(--sf-danger); }
-:root[data-theme="high-contrast"] .sf-dialog[data-variant="warning"] .sf-button-primary { background: var(--sf-warning); border-color: var(--sf-warning); }
-:root[data-theme="high-contrast"] .sf-dialog[data-variant="success"] .sf-button-primary { background: var(--sf-success); border-color: var(--sf-success); }
-:root[data-theme="high-contrast"] .sf-dialog[data-variant="info"] .sf-button-primary { background: var(--sf-info); border-color: var(--sf-info); }
-:root[data-theme="high-contrast"] .sf-dialog[data-variant="danger"] { --sf-primary-background: var(--sf-danger); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-danger); }
-:root[data-theme="high-contrast"] .sf-dialog[data-variant="warning"] { --sf-primary-background: var(--sf-warning); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-warning); }
-:root[data-theme="high-contrast"] .sf-dialog[data-variant="success"] { --sf-primary-background: var(--sf-success); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-success); }
-:root[data-theme="high-contrast"] .sf-dialog[data-variant="info"] { --sf-primary-background: var(--sf-info); --sf-primary-foreground: white; --sf-primary-border-color: var(--sf-info); }
+:root[data-theme="high-contrast"] .sf-dialog,
+:root[data-theme="high-contrast"] .sf-toast {
+  border: 2px solid CanvasText;
+  background: Canvas;
+  color: CanvasText;
+  box-shadow: 0 0 0 2px Canvas;
+}
+:root[data-theme="high-contrast"] .sf-dialog .sf-dialog-description {
+  color: CanvasText;
+}
+:root[data-theme="high-contrast"] .sf-dialog .sf-button {
+  border: 2px solid CanvasText;
+}
+:root[data-theme="high-contrast"] .sf-dialog .sf-button-primary {
+  border: 2px solid CanvasText;
+  outline: 1px solid Canvas;
+  outline-offset: -4px;
+  background: CanvasText;
+  color: Canvas;
+}
+:root[data-theme="high-contrast"] .sf-dialog[data-variant="danger"] .sf-button-primary {
+  background: var(--sf-danger);
+  border-color: var(--sf-danger);
+}
+:root[data-theme="high-contrast"] .sf-dialog[data-variant="warning"] .sf-button-primary {
+  background: var(--sf-warning);
+  border-color: var(--sf-warning);
+}
+:root[data-theme="high-contrast"] .sf-dialog[data-variant="success"] .sf-button-primary {
+  background: var(--sf-success);
+  border-color: var(--sf-success);
+}
+:root[data-theme="high-contrast"] .sf-dialog[data-variant="info"] .sf-button-primary {
+  background: var(--sf-info);
+  border-color: var(--sf-info);
+}
+:root[data-theme="high-contrast"] .sf-dialog[data-variant="danger"] {
+  --sf-primary-background: var(--sf-danger);
+  --sf-primary-foreground: white;
+  --sf-primary-border-color: var(--sf-danger);
+}
+:root[data-theme="high-contrast"] .sf-dialog[data-variant="warning"] {
+  --sf-primary-background: var(--sf-warning);
+  --sf-primary-foreground: white;
+  --sf-primary-border-color: var(--sf-warning);
+}
+:root[data-theme="high-contrast"] .sf-dialog[data-variant="success"] {
+  --sf-primary-background: var(--sf-success);
+  --sf-primary-foreground: white;
+  --sf-primary-border-color: var(--sf-success);
+}
+:root[data-theme="high-contrast"] .sf-dialog[data-variant="info"] {
+  --sf-primary-background: var(--sf-info);
+  --sf-primary-foreground: white;
+  --sf-primary-border-color: var(--sf-info);
+}
 
 :root[data-theme="high-contrast"][data-color-mode="dark"] {
   color-scheme: dark;
@@ -46,9 +90,23 @@
   --sf-info: #9fc1ff;
   --sf-primary-foreground: #000;
 }
-:root[data-theme="high-contrast"][data-color-mode="dark"] .sf-dialog .sf-button-primary { background: CanvasText; color: Canvas; }
+:root[data-theme="high-contrast"][data-color-mode="dark"] .sf-dialog .sf-button-primary {
+  background: CanvasText;
+  color: Canvas;
+}
 
 @media (prefers-color-scheme: dark) {
-  :root[data-theme="high-contrast"]:not([data-color-mode="light"]) { color-scheme: dark; --sf-accent: #9fc1ff; --sf-danger: #ffb4ab; --sf-warning: #f5c36a; --sf-success: #85e0a1; --sf-info: #9fc1ff; --sf-primary-foreground: #000; }
-  :root[data-theme="high-contrast"]:not([data-color-mode="light"]) .sf-dialog .sf-button-primary { background: CanvasText; color: Canvas; }
+  :root[data-theme="high-contrast"]:not([data-color-mode="light"]) {
+    color-scheme: dark;
+    --sf-accent: #9fc1ff;
+    --sf-danger: #ffb4ab;
+    --sf-warning: #f5c36a;
+    --sf-success: #85e0a1;
+    --sf-info: #9fc1ff;
+    --sf-primary-foreground: #000;
+  }
+  :root[data-theme="high-contrast"]:not([data-color-mode="light"]) .sf-dialog .sf-button-primary {
+    background: CanvasText;
+    color: Canvas;
+  }
 }

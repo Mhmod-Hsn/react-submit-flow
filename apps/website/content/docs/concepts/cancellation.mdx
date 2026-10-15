@@ -6,23 +6,23 @@ Every runner receives an `AbortSignal` in its context. `flow.cancel()` requests 
 const flow = useSubmitFlow({
   refresh: {
     run: async (_input, { signal }) => {
-      const response = await fetch('/api/refresh', { method: 'POST', signal })
-      if (!response.ok) throw new Error('Refresh failed')
-      return response.json()
+      const response = await fetch("/api/refresh", { method: "POST", signal });
+      if (!response.ok) throw new Error("Refresh failed");
+      return response.json();
     },
   },
-})
+});
 ```
 
 For multi-step runners, check cancellation between steps. A dependency may ignore the signal after the request has started, but `throwIfCancelled()` prevents the next step from beginning.
 
 ```tsx
 run: async (input, context) => {
-  const record = await saveDraft(input, { signal: context.signal })
-  context.throwIfCancelled()
-  await publishRecord(record.id, { signal: context.signal })
-  return record
-}
+  const record = await saveDraft(input, { signal: context.signal });
+  context.throwIfCancelled();
+  await publishRecord(record.id, { signal: context.signal });
+  return record;
+};
 ```
 
 The result is `{ status: 'cancelled', reason: 'user' }` after an active run settles. A declined confirmation resolves with `reason: 'declined'`. A cancelled request is not a rollback guarantee. Try the [abort-aware example](/examples/cancel-request).

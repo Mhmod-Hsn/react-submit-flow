@@ -5,13 +5,13 @@ Built-in dialogs require `SubmitFlowProvider`. The provider serializes standalon
 ## Standalone confirmation
 
 ```tsx
-const feedback = useSubmitFeedback()
+const feedback = useSubmitFeedback();
 const confirmed = await feedback.confirm({
-  title: 'Delete this project?',
-  description: 'You cannot undo this action.',
+  title: "Delete this project?",
+  description: "You cannot undo this action.",
   destructive: true,
-})
-if (confirmed) await deleteProject()
+});
+if (confirmed) await deleteProject();
 ```
 
 `confirm()` returns `true` only when the user confirms. Cancel and allowed dismissal paths return `false`.
@@ -20,11 +20,11 @@ if (confirmed) await deleteProject()
 
 ```tsx
 const result = await feedback.alert({
-  title: 'Export ready',
-  description: 'Your archive has been created.',
-  variant: 'success',
-  acknowledgeLabel: 'Done',
-})
+  title: "Export ready",
+  description: "Your archive has been created.",
+  variant: "success",
+  acknowledgeLabel: "Done",
+});
 ```
 
 The result distinguishes acknowledgement from dismissal: `{ status: 'acknowledged' }` or `{ status: 'dismissed', reason }`.
@@ -53,11 +53,11 @@ For a provider-wide default, set `dialogDefaults={{ closeOnConfirm: false }}` on
 const flow = useSubmitFlow({
   publish: {
     run: publishProject,
-    confirm: { title: 'Publish now?', description: 'This will make it public.' },
+    confirm: { title: "Publish now?", description: "This will make it public." },
     closeOnConfirm: false,
-    pendingLabel: 'Publishing…',
+    pendingLabel: "Publishing…",
   },
-})
+});
 ```
 
 The action runs once after confirmation. During execution, the confirm button stays visible, disabled, and displays the pending label; Cancel remains available until cancellation is requested. Success closes the dialog. Cancellation stays visible until the action settles. Failure appears inside the dialog; closing it never retries. Start a new action explicitly to try again.

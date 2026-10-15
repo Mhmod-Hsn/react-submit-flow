@@ -3,15 +3,17 @@
 Import `useSubmitFlow` and public types from `react-submit-flow/headless` when you render all controls and feedback yourself. This entry does not import the built-in provider or dialog component.
 
 ```tsx
-import { useSubmitFlow } from 'react-submit-flow/headless'
+import { useSubmitFlow } from "react-submit-flow/headless";
 
 function HeadlessSave() {
   const flow = useSubmitFlow({
     save: { run: async (input: { title: string }) => saveDraft(input) },
-  })
-  return <button disabled={flow.isBusy} onClick={() => void flow.run('save', { title: 'Draft' })}>
-    {flow.isBusy ? 'Saving…' : 'Save'}
-  </button>
+  });
+  return (
+    <button disabled={flow.isBusy} onClick={() => void flow.run("save", { title: "Draft" })}>
+      {flow.isBusy ? "Saving…" : "Save"}
+    </button>
+  );
 }
 ```
 
@@ -26,7 +28,7 @@ const flow = useSubmitFlow(actions, {
       dismiss: (id) => toast.dismiss(id),
     },
   },
-})
+});
 ```
 
 An adapter owns its presentation, focus behavior, and cleanup. A headless flow that requests confirmation without a provider or adapter reports a setup error before running the action. The current `useSubmitFeedback()` standalone alert/confirm API belongs to the UI entry and requires the provider.

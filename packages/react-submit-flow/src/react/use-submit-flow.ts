@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useSyncExternalStore } from 'react';
-import { FlowController } from '../core/controller';
-import { useFeedbackBridge } from './bridge';
-import type { ActionMap, FlowOptions, MappedRunResult, RunArguments } from '../types';
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { FlowController } from "../core/controller";
+import { useFeedbackBridge } from "./bridge";
+import type { ActionMap, FlowOptions, MappedRunResult, RunArguments } from "../types";
 
 export function useSubmitFlow<T extends ActionMap>(actions: T, options: FlowOptions = {}) {
   const actionsRef = useRef(actions);
@@ -23,7 +23,11 @@ export function useSubmitFlow<T extends ActionMap>(actions: T, options: FlowOpti
     );
   }
   const controller = controllerRef.current;
-  const snapshot = useSyncExternalStore(controller.subscribe, controller.getSnapshot, controller.getServerSnapshot);
+  const snapshot = useSyncExternalStore(
+    controller.subscribe,
+    controller.getSnapshot,
+    controller.getServerSnapshot,
+  );
 
   useEffect(() => controller.attach(), [controller]);
 

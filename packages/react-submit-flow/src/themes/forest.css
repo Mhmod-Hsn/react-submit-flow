@@ -9,34 +9,65 @@
   --sf-dialog-background: #f8fbf8;
   --sf-dialog-foreground: #173b2a;
   --sf-dialog-border-color: #cfddd1;
-  --sf-dialog-shadow: 0 24px 72px rgb(0 0 0 / .26);
+  --sf-dialog-shadow: 0 24px 72px rgb(0 0 0 / 0.26);
   --sf-toast-background: #f8fbf8;
   --sf-toast-foreground: #173b2a;
   --sf-toast-border-color: #cfddd1;
-  --sf-toast-shadow: 0 12px 36px rgb(0 0 0 / .16);
+  --sf-toast-shadow: 0 12px 36px rgb(0 0 0 / 0.16);
   --sf-button-border-color: #53705c;
-  --sf-button-radius: .65rem;
+  --sf-button-radius: 0.65rem;
   --sf-primary-background: var(--sf-accent);
   --sf-primary-foreground: white;
   --sf-primary-border-color: var(--sf-accent);
 }
 
-:root[data-theme="forest"] .sf-dialog, :root[data-theme="forest"] .sf-toast {
+:root[data-theme="forest"] .sf-dialog,
+:root[data-theme="forest"] .sf-toast {
   border-color: #cfddd1;
   background: #f8fbf8;
   color: #173b2a;
 }
 
-:root[data-theme="forest"] .sf-dialog .sf-dialog-description { color: #4e6758; }
-:root[data-theme="forest"] .sf-dialog .sf-button-primary { background: var(--sf-accent); border-color: var(--sf-accent); color: white; }
-:root[data-theme="forest"] .sf-dialog[data-variant="danger"] .sf-button-primary { background: var(--sf-danger); border-color: var(--sf-danger); }
-:root[data-theme="forest"] .sf-dialog[data-variant="warning"] .sf-button-primary { background: var(--sf-warning); border-color: var(--sf-warning); }
-:root[data-theme="forest"] .sf-dialog[data-variant="success"] .sf-button-primary { background: var(--sf-success); border-color: var(--sf-success); }
-:root[data-theme="forest"] .sf-dialog[data-variant="info"] .sf-button-primary { background: var(--sf-accent); border-color: var(--sf-accent); }
-:root[data-theme="forest"] .sf-dialog[data-variant="danger"] { --sf-primary-background: var(--sf-danger); --sf-primary-border-color: var(--sf-danger); }
-:root[data-theme="forest"] .sf-dialog[data-variant="warning"] { --sf-primary-background: var(--sf-warning); --sf-primary-border-color: var(--sf-warning); }
-:root[data-theme="forest"] .sf-dialog[data-variant="success"] { --sf-primary-background: var(--sf-success); --sf-primary-border-color: var(--sf-success); }
-:root[data-theme="forest"] .sf-dialog[data-variant="info"] { --sf-primary-background: var(--sf-accent); --sf-primary-border-color: var(--sf-accent); }
+:root[data-theme="forest"] .sf-dialog .sf-dialog-description {
+  color: #4e6758;
+}
+:root[data-theme="forest"] .sf-dialog .sf-button-primary {
+  background: var(--sf-accent);
+  border-color: var(--sf-accent);
+  color: white;
+}
+:root[data-theme="forest"] .sf-dialog[data-variant="danger"] .sf-button-primary {
+  background: var(--sf-danger);
+  border-color: var(--sf-danger);
+}
+:root[data-theme="forest"] .sf-dialog[data-variant="warning"] .sf-button-primary {
+  background: var(--sf-warning);
+  border-color: var(--sf-warning);
+}
+:root[data-theme="forest"] .sf-dialog[data-variant="success"] .sf-button-primary {
+  background: var(--sf-success);
+  border-color: var(--sf-success);
+}
+:root[data-theme="forest"] .sf-dialog[data-variant="info"] .sf-button-primary {
+  background: var(--sf-accent);
+  border-color: var(--sf-accent);
+}
+:root[data-theme="forest"] .sf-dialog[data-variant="danger"] {
+  --sf-primary-background: var(--sf-danger);
+  --sf-primary-border-color: var(--sf-danger);
+}
+:root[data-theme="forest"] .sf-dialog[data-variant="warning"] {
+  --sf-primary-background: var(--sf-warning);
+  --sf-primary-border-color: var(--sf-warning);
+}
+:root[data-theme="forest"] .sf-dialog[data-variant="success"] {
+  --sf-primary-background: var(--sf-success);
+  --sf-primary-border-color: var(--sf-success);
+}
+:root[data-theme="forest"] .sf-dialog[data-variant="info"] {
+  --sf-primary-background: var(--sf-accent);
+  --sf-primary-border-color: var(--sf-accent);
+}
 
 :root[data-theme="forest"][data-color-mode="dark"] {
   color-scheme: dark;
@@ -48,17 +79,50 @@
   --sf-toast-border-color: #315342;
 }
 :root[data-theme="forest"][data-color-mode="dark"] .sf-dialog,
-:root[data-theme="forest"][data-color-mode="dark"] .sf-toast { border-color: #315342; background: #14251c; color: #e4f1e8; }
-:root[data-theme="forest"][data-color-mode="dark"] .sf-dialog .sf-dialog-description { color: #b3c7ba; }
-:root[data-theme="forest"][data-color-mode="dark"] .sf-dialog .sf-button { border-color: #53705c; }
-:root[data-theme="forest"][data-color-mode="dark"] .sf-dialog .sf-button-primary { border-color: var(--sf-accent); background: var(--sf-accent); color: white; }
+:root[data-theme="forest"][data-color-mode="dark"] .sf-toast {
+  border-color: #315342;
+  background: #14251c;
+  color: #e4f1e8;
+}
+:root[data-theme="forest"][data-color-mode="dark"] .sf-dialog .sf-dialog-description {
+  color: #b3c7ba;
+}
+:root[data-theme="forest"][data-color-mode="dark"] .sf-dialog .sf-button {
+  border-color: #53705c;
+}
+:root[data-theme="forest"][data-color-mode="dark"] .sf-dialog .sf-button-primary {
+  border-color: var(--sf-accent);
+  background: var(--sf-accent);
+  color: white;
+}
 
 @media (prefers-color-scheme: dark) {
-  :root[data-theme="forest"]:not([data-color-mode="light"]) { color-scheme: dark; }
-  :root[data-theme="forest"]:not([data-color-mode="light"]) { --sf-dialog-background: #14251c; --sf-dialog-foreground: #e4f1e8; --sf-dialog-border-color: #315342; --sf-toast-background: #14251c; --sf-toast-foreground: #e4f1e8; --sf-toast-border-color: #315342; }
+  :root[data-theme="forest"]:not([data-color-mode="light"]) {
+    color-scheme: dark;
+  }
+  :root[data-theme="forest"]:not([data-color-mode="light"]) {
+    --sf-dialog-background: #14251c;
+    --sf-dialog-foreground: #e4f1e8;
+    --sf-dialog-border-color: #315342;
+    --sf-toast-background: #14251c;
+    --sf-toast-foreground: #e4f1e8;
+    --sf-toast-border-color: #315342;
+  }
   :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-dialog,
-  :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-toast { border-color: #315342; background: #14251c; color: #e4f1e8; }
-  :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-dialog .sf-dialog-description { color: #b3c7ba; }
-  :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-dialog .sf-button { border-color: #53705c; }
-  :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-dialog .sf-button-primary { border-color: var(--sf-accent); background: var(--sf-accent); color: white; }
+  :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-toast {
+    border-color: #315342;
+    background: #14251c;
+    color: #e4f1e8;
+  }
+  :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-dialog .sf-dialog-description {
+    color: #b3c7ba;
+  }
+  :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-dialog .sf-button {
+    border-color: #53705c;
+  }
+  :root[data-theme="forest"]:not([data-color-mode="light"]) .sf-dialog .sf-button-primary {
+    border-color: var(--sf-accent);
+    background: var(--sf-accent);
+    color: white;
+  }
 }
